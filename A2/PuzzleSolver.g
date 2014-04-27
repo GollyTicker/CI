@@ -8,7 +8,6 @@ options {
 tokens {
 	BLOCK;
 	CONDS;
-	OPS;
 	PLUS;
 }
 
@@ -46,6 +45,8 @@ public static CommonTree buildFromBILD(String operator, Tree first, Tree second,
 	return vertical;
 }
 
+public CommonTree condsAST = null;
+
 }
 
 // mit ^ kann man den root des Unterbaums festlegen.
@@ -82,9 +83,15 @@ prog	:   	c1=row NL
         System.out.println("Middle Row: "+ c2.tree.toStringTree());	    //Middle Row: (PLUS (BLOCK H F C) (BLOCK G I) (BLOCK A A A))
         
         
+        // creating from atlrs adoptor.
+//      http://www.docjar.com/docs/api/org/antlr/runtime/tree/BaseTreeAdaptor.html
+//	http://stackoverflow.com/questions/13812543/antlr-grandchild-nodes-in-tree-construction
+        
+        condsAST = (CommonTree) adaptor.create(PLUS, "PLUS");//new CommonTree(new CommonToken(PLUS,"PLUS"));
+        System.out.println("condsAST: " + condsAST.toStringTree());
         
 	}
-		-> ^(CONDS row row row) /*{leftVertical}*/  // merging simply wont work....
+		-> {(Object)condsAST)}//^(CONDS row row row) /*{leftVertical}*/  // merging simply wont work....
 		// it is also possible to insert java code here, to create the AST. See. Antlr Reference p.170
     ;
 
@@ -96,14 +103,14 @@ row	returns[Tree left, Tree mid, Tree right]
 	{$right=$r.tree;}
 	// Conditional Tree Rewrites: see Antlr - The Definitive Reference, p.168, Chosing between Tree Structures at Runtime
 	-> { $op.text.trim().equals("-") }? ^(PLUS $m $r $l)	// case "-"
-	->  ^(PLUS grouped_ids grouped_ids grouped_ids)	// general case "+"
+	->  ^(PLUS $l $m $r)	// general case "+"
 ;
 
 
 op_row	returns[String left, String mid, String right]
 	:   l=OP m=OP r=OP
 	{$left=$l.text;}
-	{$mid=$m.text; }
+	{$mid=$m.text;}
 	{$right=$r.text;} 
 	;
 
@@ -113,10 +120,10 @@ eq_row
 
 // die einzellnen Ids nach oben delegieren
 grouped_ids
-	:	ID+ -> ^(BLOCK ID+)
+	:	ID+ -> ^(BLOCK ID+)	// A C E -> (BLOCK A C E); A -> (BLOCK A)
 	;
     
-NL	:	('\r\n' 
+NL	:	('\r\n'
         | 	'\r'
         |	'\n')
 	;
