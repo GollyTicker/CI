@@ -31,16 +31,16 @@ import org.antlr.stringtemplate.*;
 // Zweiteres vereinfacht den AST mehr und macht ihn von der konkreten Wahl einer Operators unabhaengig.
 // a - b = c wird umgeschrieben zu b + c = a
 public static CommonTree buildFromBILD(String operator, Tree first, Tree second, Tree third) {
-	CommonTree vertical = new CommonTree(new CommonToken(PLUS,"PLUS")); // erzeugen eines PLUS Knotens
+	CommonTree vertical = (CommonTree)adaptor.becomeRoot(PLUS, "PLUS");//new CommonTree(new CommonToken(PLUS,"PLUS")); // erzeugen eines PLUS Knotens
 	if(operator.trim().equals("-")) {
-		vertical.addChild(second);
-		vertical.addChild(third);
-		vertical.addChild(first);
+		adaptor.addChild(vertical, second);
+		adaptor.addChild(vertical, third);
+		adaptor.addChild(vertical, first);
 	}
 	else {
-		vertical.addChild(first);
-		vertical.addChild(second);
-		vertical.addChild(third);
+		adaptor.addChild(vertical, first);
+		adaptor.addChild(vertical, second);
+		adaptor.addChild(vertical, third); 
 	}
 	return vertical;
 }
@@ -87,11 +87,11 @@ prog	:   	c1=row NL
 //      http://www.docjar.com/docs/api/org/antlr/runtime/tree/BaseTreeAdaptor.html
 //	http://stackoverflow.com/questions/13812543/antlr-grandchild-nodes-in-tree-construction
         
-        condsAST = (CommonTree) adaptor.create(PLUS, "PLUS");//new CommonTree(new CommonToken(PLUS,"PLUS"));
+        condsAST = (CommonTree) adaptor.becomeRoot(PLUS, "PLUS");//new CommonTree(new CommonToken(PLUS,"PLUS"));
         System.out.println("condsAST: " + condsAST.toStringTree());
         
 	}
-		-> {(Object)condsAST)}//^(CONDS row row row) /*{leftVertical}*/  // merging simply wont work....
+		-> {(Object)condsAST}//^(CONDS row row row) /*{leftVertical}*/  // merging simply wont work....
 		// it is also possible to insert java code here, to create the AST. See. Antlr Reference p.170
     ;
 
