@@ -5,6 +5,7 @@ options {
 	ASTLabelType=CommonTree;
 }
 
+// Deklaration der eigenen Tokens
 tokens {
 	BLOCK;
 	CONDS;
@@ -13,9 +14,7 @@ tokens {
 
 @header {
 // import zum manuellen Bauen der Trees
-
-// http://www.docjar.com/docs/api/org/antlr/runtime/tree/Tree.html	Interface
-
+// http://www.docjar.com/docs/api/org/antlr/runtime/tree/Tree.html
 import org.antlr.tool.*;
 import org.antlr.runtime.*;
 import org.antlr.runtime.tree.*;
@@ -44,6 +43,11 @@ public CommonTree buildFromBILD(String operator, Tree first, Tree second, Tree t
 	}
 	return vertical;
 }
+// anstatt "new CommonTree(...)" muss an adaptor verwenden, da sonst die Integration mit den
+// ANTLR ASTs nicht funktioniert.
+
+public void show(Object a) {System.out.println(a);}
+
 }
 
 // mit ^ kann man den root des Unterbaums festlegen.
@@ -65,6 +69,7 @@ prog	:   	c1=row NL
 		c3=row
 	{
 	// First Vertical Condition
+	// access the synthetic attributes and the trees for manuel AST building.
 	CommonTree leftVertical = buildFromBILD(opRow.left, c1.left, c2.left, c3.left);
 	
 	// Second Vertical Condition
@@ -75,23 +80,25 @@ prog	:   	c1=row NL
 	
 	// Demonstration. Tree's are printed in LISP Tree Notation.
 	// f.e. (A B C D E) means a Node A with children B, C, D and E.
-        System.out.println("leftVertical: " + leftVertical.toStringTree()); //leftVertical: (PLUS (BLOCK A A A) (BLOCK A H) (BLOCK A C E))
-        System.out.println("midVertical: " + midVertical.toStringTree());   //midVertical: (PLUS (BLOCK D A C) (BLOCK H F C) (BLOCK I I I))
-        System.out.println("Middle Row: "+ c2.tree.toStringTree());	    //Middle Row: (PLUS (BLOCK H F C) (BLOCK G I) (BLOCK A A A))
+        show("leftVertical: " + leftVertical.toStringTree()); // leftVertical: (PLUS (BLOCK A A A) (BLOCK A H) (BLOCK A C E))
+        show("midVertical: " + midVertical.toStringTree());   // midVertical: (PLUS (BLOCK D A C) (BLOCK H F C) (BLOCK I I I))
+        show("Middle Row: "+ c2.tree.toStringTree());	      // Middle Row: (PLUS (BLOCK H F C) (BLOCK G I) (BLOCK A A A))
         
         
         // creating from atlrs adoptor.
-//      http://www.docjar.com/docs/api/org/antlr/runtime/tree/BaseTreeAdaptor.html
-//	http://stackoverflow.com/questions/13812543/antlr-grandchild-nodes-in-tree-construction
+	// http://www.docjar.com/docs/api/org/antlr/runtime/tree/BaseTreeAdaptor.html
+	// http://stackoverflow.com/questions/13812543/antlr-grandchild-nodes-in-tree-construction
         
+        // creating final tree
         CommonTree condsAST = (CommonTree) adaptor.create(CONDS, "CONDS");
         adaptor.addChild(condsAST,$c1.tree);
         adaptor.addChild(condsAST,$c2.tree);
         adaptor.addChild(condsAST,$c3.tree);
         adaptor.addChild(condsAST,leftVertical);
-//        adaptor.addChild(condsAST,midVertical);
-//        adaptor.addChild(condsAST,rightVertical);
-        System.out.println("condsAST: " + condsAST.toStringTree());
+        adaptor.addChild(condsAST,midVertical);
+        adaptor.addChild(condsAST,rightVertical);
+        
+        show("condsAST: " + condsAST.toStringTree());
         
 	}
 		-> {(Object)condsAST} // lol. casting to Object solved this problem....
@@ -105,11 +112,11 @@ row	returns[Tree left, Tree mid, Tree right]
 	{$mid=$m.tree;}
 	{$right=$r.tree;}
 	// Conditional Tree Rewrites: see Antlr - The Definitive Reference, p.168, Chosing between Tree Structures at Runtime
-	-> { $op.text.trim().equals("-") }? ^(PLUS $m $r $l)	// case "-"
+	-> { $op.text.trim().equals("-") }? ^(PLUS $m $r $l)	// case "-". The order of the children is shifted.
 	->  ^(PLUS $l $m $r)	// general case "+"
 ;
 
-
+// return the matched text to make it later possible to see whether a + or - was matched.
 op_row	returns[String left, String mid, String right]
 	:   l=OP m=OP r=OP
 	{$left=$l.text;}
