@@ -30,8 +30,8 @@ import org.antlr.stringtemplate.*;
 // oder buildFromBILD("-", (BLOCK A B C) (BLOCK D E F) (BLOCK G H I) ) => (PLUS (BLOCK D E F) (BLOCK G H I) (BLOCK A B C) )
 // Zweiteres vereinfacht den AST mehr und macht ihn von der konkreten Wahl einer Operators unabhaengig.
 // a - b = c wird umgeschrieben zu b + c = a
-public static CommonTree buildFromBILD(String operator, Tree first, Tree second, Tree third) {
-	CommonTree vertical = new CommonTree(new CommonToken(PLUS,"PLUS"));
+public CommonTree buildFromBILD(String operator, Tree first, Tree second, Tree third) {
+	CommonTree vertical = //new CommonTree(new CommonToken(PLUS,"PLUS"));
 	if(operator.trim().equals("-")) {
 		vertical.addChild(second);
 		vertical.addChild(third);
@@ -89,9 +89,8 @@ prog	:   	c1=row NL
         adaptor.addChild(condsAST,$c2.tree);
         adaptor.addChild(condsAST,$c3.tree);
         adaptor.addChild(condsAST,leftVertical);
-//        adaptor.addChild(condsAST,$c3.tree);
-//        adaptor.addChild(condsAST,$c3.tree);
-        
+//        adaptor.addChild(condsAST,midVertical);
+//        adaptor.addChild(condsAST,rightVertical);
         System.out.println("condsAST: " + condsAST.toStringTree());
         
 	}
