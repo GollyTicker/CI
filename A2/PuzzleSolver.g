@@ -31,7 +31,7 @@ import org.antlr.stringtemplate.*;
 // Zweiteres vereinfacht den AST mehr und macht ihn von der konkreten Wahl einer Operators unabhaengig.
 // a - b = c wird umgeschrieben zu b + c = a
 public CommonTree buildFromBILD(String operator, Tree first, Tree second, Tree third) {
-	CommonTree vertical = (CommonTree)adaptor.becomeRoot(PLUS, "PLUS");// erzeugen eines PLUS Knotens
+	CommonTree vertical = (CommonTree)adaptor.create(PLUS, "PLUS");// erzeugen eines PLUS Knotens
 	if(operator.trim().equals("-")) {
 		adaptor.addChild(vertical, second);
 		adaptor.addChild(vertical, third);
