@@ -66,7 +66,7 @@ prog	:   	c1=row NL
 	
 	// http://www.docjar.com/docs/api/org/antlr/runtime/tree/Tree.html
 	}
-		-> ^(CONDS row row row {leftVertical})  // merging simply wont work....
+		-> ^(CONDS row row row) /*{leftVertical}*/  // merging simply wont work....
 		// it is also possible to insert java code here, to create the AST. See. Antlr Reference p.170
     ;
 
@@ -97,8 +97,9 @@ grouped_ids
 	:	ID+ -> ^(BLOCK ID+)
 	;
     
-NL	:	('\n' 
-        | 	'\r')
+NL	:	('\r\n' 
+        | 	'\r'
+        |	'\n')
 	;
 
 OP 	: 	('+'|'-')
