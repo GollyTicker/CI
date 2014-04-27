@@ -13,6 +13,10 @@ tokens {
 }
 
 @header {
+// import zum manuellen Bauen der Trees
+
+// http://www.docjar.com/docs/api/org/antlr/runtime/tree/Tree.html	Interface
+
 import org.antlr.tool.*;
 import org.antlr.runtime.*;
 import org.antlr.runtime.tree.*;
@@ -21,8 +25,14 @@ import org.antlr.stringtemplate.*;
 
 @members {
 
+// Diese Methode nimmt die Baeume fuer eine Spalte und den dazugehoerigen Operator (plus oder minus)
+// und baut daraus den korrekten AST.
+// z.b. buildFromBILD("+", (BLOCK A B C) (BLOCK D E F) (BLOCK G H I) ) => (PLUS (BLOCK A B C) (BLOCK D E F) (BLOCK G H I) )
+// oder buildFromBILD("-", (BLOCK A B C) (BLOCK D E F) (BLOCK G H I) ) => (PLUS (BLOCK D E F) (BLOCK G H I) (BLOCK A B C) )
+// Zweiteres vereinfacht den AST mehr und macht ihn von der konkreten Wahl einer Operators unabhaengig.
+// a - b = c wird umgeschrieben zu b + c = a
 public static CommonTree buildFromBILD(String operator, Tree first, Tree second, Tree third) {
-	CommonTree vertical = new CommonTree(new CommonToken(PLUS,"PLUS"));
+	CommonTree vertical = new CommonTree(new CommonToken(PLUS,"PLUS")); // erzeugen eines PLUS Knotens
 	if(operator.trim().equals("-")) {
 		vertical.addChild(second);
 		vertical.addChild(third);
@@ -45,6 +55,11 @@ public static CommonTree buildFromBILD(String operator, Tree first, Tree second,
 // Siehe Folien:
 // https://pub.informatik.haw-hamburg.de/home/pub/prof/neitzke/Compiler%20und%20Interpreter/Vorlesungsfolien/CI04%20-%20Zwischencode%20alt.pdf#page=65&zoom=page-fit,0,540	
 
+
+// Mit den Variablen werden Referenzen zu den geparsten Tokens gespeichert.
+// Da wir in den dazugehoerigen Regeln einige synthetische Attribute festgelegt haben,
+// koennen wir von hier auf diese zugrifen. Dies ermoeglich uns hier auf die linken, mittleren und
+// rechten Spalten zuzugreifen und daraus manuell die AST zusammenzubauen.
 prog	:   	c1=row NL
 		opRow=op_row NL
 		c2=row NL
@@ -60,11 +75,14 @@ prog	:   	c1=row NL
 	// Third Vertical Condition
 	CommonTree rightVertical = buildFromBILD(opRow.right, c1.right, c2.right, c3.right);
 	
-        System.out.println("leftVertical: " + leftVertical.toStringTree());	// demonstration
-        System.out.println("midVertical: " + midVertical.toStringTree());	// demonstration
-        System.out.println(c2.tree.toStringTree());
-	
-	// http://www.docjar.com/docs/api/org/antlr/runtime/tree/Tree.html
+	// Demonstration. Tree's are printed in LISP Tree Notation.
+	// f.e. (A B C D E) means a Node A with children B, C, D and E.
+        System.out.println("leftVertical: " + leftVertical.toStringTree()); //leftVertical: (PLUS (BLOCK A A A) (BLOCK A H) (BLOCK A C E))
+        System.out.println("midVertical: " + midVertical.toStringTree());   //midVertical: (PLUS (BLOCK D A C) (BLOCK H F C) (BLOCK I I I))
+        System.out.println("Middle Row: "+ c2.tree.toStringTree());	    //Middle Row: (PLUS (BLOCK H F C) (BLOCK G I) (BLOCK A A A))
+        
+        
+        
 	}
 		-> ^(CONDS row row row) /*{leftVertical}*/  // merging simply wont work....
 		// it is also possible to insert java code here, to create the AST. See. Antlr Reference p.170
@@ -73,9 +91,10 @@ prog	:   	c1=row NL
 row	returns[Tree left, Tree mid, Tree right]
 	:
 	l=grouped_ids op=OP m=grouped_ids EQ r=grouped_ids
-	{$left=$l.tree;}
+	{$left=$l.tree;}	// extrahieren der ASTs aus den grouped_ids um diese nach oben zurueckzugeben.
 	{$mid=$m.tree;}
 	{$right=$r.tree;}
+	// Conditional Tree Rewrites: see Antlr - The Definitive Reference, p.168, Chosing between Tree Structures at Runtime
 	-> { $op.text.trim().equals("-") }? ^(PLUS $m $r $l)	// case "-"
 	->  ^(PLUS grouped_ids grouped_ids grouped_ids)	// general case "+"
 ;
