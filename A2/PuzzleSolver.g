@@ -31,16 +31,16 @@ import org.antlr.stringtemplate.*;
 // Zweiteres vereinfacht den AST mehr und macht ihn von der konkreten Wahl einer Operators unabhaengig.
 // a - b = c wird umgeschrieben zu b + c = a
 public CommonTree buildFromBILD(String operator, Tree first, Tree second, Tree third) {
-	CommonTree vertical = //new CommonTree(new CommonToken(PLUS,"PLUS"));
+	CommonTree vertical = (CommonTree)adaptor.becomeRoot(PLUS, "PLUS");// erzeugen eines PLUS Knotens
 	if(operator.trim().equals("-")) {
-		vertical.addChild(second);
-		vertical.addChild(third);
-		vertical.addChild(first);
+		adaptor.addChild(vertical, second);
+		adaptor.addChild(vertical, third);
+		adaptor.addChild(vertical, first);
 	}
 	else {
-		vertical.addChild(first);
-		vertical.addChild(second);
-		vertical.addChild(third);
+		adaptor.addChild(vertical, first);
+		adaptor.addChild(vertical, second);
+		adaptor.addChild(vertical, third); 
 	}
 	return vertical;
 }
