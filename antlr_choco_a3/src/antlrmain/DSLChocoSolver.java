@@ -48,6 +48,7 @@ import choco.kernel.solver.Solver;
 
             IntegerVariable donald = Choco.makeIntVar("donald", 0, 1000000, Options.V_BOUND);
             IntegerVariable gerald = Choco.makeIntVar("gerald", 0, 1000000, Options.V_BOUND);
+
             IntegerVariable robert = Choco.makeIntVar("robert", 0, 1000000, Options.V_BOUND);
 
 
@@ -62,6 +63,11 @@ import choco.kernel.solver.Solver;
                     r, t}, c);
             // Add equality between name and letters combination
 
+
+
+            model.addConstraint(Choco.eq(donaldLetters, donald));
+            model.addConstraint(Choco.eq(geraldLetters, gerald));
+            model.addConstraint(Choco.eq(robertLetters, robert));
 
 
             // Constant of coefficients
@@ -99,9 +105,6 @@ import choco.kernel.solver.Solver;
             model.addConstraint(Choco.eq(c6, 0));
 
             // all different
-            model.addConstraint(Choco.eq(donaldLetters, donald));
-            model.addConstraint(Choco.eq(geraldLetters, gerald));
-            model.addConstraint(Choco.eq(robertLetters, robert));
 
 
             model.addConstraint(Choco.allDifferent(d, o, n, a, l, g, e, r, b, t));
@@ -119,6 +122,12 @@ import choco.kernel.solver.Solver;
             System.out.println("donald␣=␣" + s.getVar(donald).getVal());
             System.out.println("gerald␣=␣" + s.getVar(gerald).getVal());
             System.out.println("robert␣=␣" + s.getVar(robert).getVal());
+
+
+           
+
+            System.out.println("donald: " + s.getVar(d).getVal() + s.getVar(o).getVal() + s.getVar(n).getVal()
+                                    + s.getVar(a).getVal() + s.getVar(l).getVal() + s.getVar(d).getVal());
 
 
 
