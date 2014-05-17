@@ -76,6 +76,7 @@ import choco.kernel.solver.Solver;
             model.addConstraint(Choco.gt(d, 0));
             model.addConstraint(Choco.gt(g, 0));
             model.addConstraint(Choco.gt(r, 0));
+
             IntegerExpressionVariable one_1 = Choco.plus(Choco.plus(d, d), c0);
             IntegerExpressionVariable two_1= Choco.plus(t, Choco.mult(c1, constant));
             model.addConstraint(Choco.eq(one_1, two_1));
@@ -124,7 +125,7 @@ import choco.kernel.solver.Solver;
             System.out.println("robert␣=␣" + s.getVar(robert).getVal());
 
 
-           
+
 
             System.out.println("donald: " + s.getVar(d).getVal() + s.getVar(o).getVal() + s.getVar(n).getVal()
                                     + s.getVar(a).getVal() + s.getVar(l).getVal() + s.getVar(d).getVal());
