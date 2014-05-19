@@ -8,8 +8,6 @@ options {
 tokens {
 	BLOCK;
 	CONDS;
-	PLUS;
-	MINUS;
 }
 
 // der AST wird hier auf der obersten Ebene bis ganz tief nach unten zusammengebaut
@@ -38,7 +36,8 @@ NL	:	('\r\n'
         |	'\n')
 	;
 
-OP 	: 	('+'|'-')
+OP 	: 	'+'
+	|	'-'
 	;
 
 ID  	:	('A'..'Z')
