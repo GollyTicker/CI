@@ -12,13 +12,15 @@ tokens {
 	MINUS;
 }
 
-
-prog	:   	block OP block EQ block NL
-		OP OP OP NL
-		block OP block EQ block NL
+// der AST wird hier auf der obersten Ebene bis ganz tief nach unten zusammengebaut
+prog	:   	b00=block opHorzTop=OP b10=block EQ b20=block NL
+		opVertLeft=OP opVertMid=OP opVertRight=OP NL
+		b01=block opHorzMid=OP b11=block EQ b21=block NL
 		EQ EQ EQ NL
-		block OP block EQ block
-		-> ^(CONDS)
+		b02=block opHorzBot=OP b12=block EQ b22=block
+		-> ^(CONDS
+			^($opHorzTop $b00 $b10 $b20)
+		)
 		;
 		
 block
