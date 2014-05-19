@@ -18,9 +18,14 @@ public class ChocoSolverExample {
 
 
     public static void main(String[] args) throws Exception {
-        // Build model
-        //Problem p = new Problem();
+        long t1 = System.currentTimeMillis();
+        //for (int i = 0; i < 100; i++)
+            solveWithoutMethod();
+        long t2 = System.currentTimeMillis();
+        System.out.println(t2 - t1);
+    }
 
+    private static void solveWithoutMethod() {
         Model model = new CPModel();
         // Declare every letter as a variable
         IntegerVariable d = Choco.makeIntVar("d", 0, 9, Options.V_ENUM);
@@ -57,19 +62,13 @@ public class ChocoSolverExample {
         model.addConstraint(Choco.allDifferent(d, o, n, a, l, g, e, r, b, t));
         // Build a solver, read the model and solve it
 
-        
+
         Solver s = new CPSolver();
         s.read(model);
         s.solveAll();
         // Print name value
-        System.out.println("get domain for donald"+s.getVar(donald).getDomain());
-        System.out.println("get domain for gerald"+s.getVar(gerald).getDomain());
-        System.out.println("get domain for robert"+s.getVar(robert).getDomain());
-        System.out.println(" d value"+(d.getValues()));
-        System.out.println("donald␣=␣" + s.getVar(donald).getVal());
-        System.out.println("gerald␣=␣" + s.getVar(gerald).getVal());
-        System.out.println("robert␣=␣" + s.getVar(robert).getVal());
-
-
+        // System.out.println("donald␣=␣" + s.getVar(donald).getVal());
+        // System.out.println("gerald␣=␣" + s.getVar(gerald).getVal());
+        // System.out.println("robert␣=␣" + s.getVar(robert).getVal());
     }
 }

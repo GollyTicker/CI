@@ -5,7 +5,9 @@ package antlrmain; /**
 import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.tree.CommonTree;
+import org.antlr.runtime.tree.CommonTreeNodeStream;
 
+import javax.xml.transform.sax.SAXSource;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
@@ -35,7 +37,13 @@ public class AntlrMain {
         System.out.println("prog_return");
         //verarbeiten den parse baum zum AST
         CommonTree t = (CommonTree) r.getTree();
-        System.out.println("AST: " + t.toStringTree());
+
+        System.out.println("generatued old AST: " + t.toStringTree());
+        CommonTreeNodeStream nodes = new CommonTreeNodeStream(t);
+        System.out.println("generatued node stream");
+        PuzzleSolverTreeGrammar walker = new PuzzleSolverTreeGrammar(nodes);
+        CommonTree normalized = (CommonTree)walker.walk().getTree();
+        System.out.println("Normalized AST: " + normalized.toStringTree());
 
     }
 }

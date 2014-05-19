@@ -1,5 +1,5 @@
+// $ANTLR 3.4 /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g 2014-05-19 11:23:06
 package antlrmain;
-
 import org.antlr.runtime.*;
 
 @SuppressWarnings({"all", "warnings", "unchecked"})
@@ -12,12 +12,13 @@ public class PuzzleSolverLexer extends Lexer {
     public static final int ESC_SEQ=8;
     public static final int HEX_DIGIT=9;
     public static final int ID=10;
-    public static final int NL=11;
-    public static final int OCTAL_ESC=12;
-    public static final int OP=13;
-    public static final int PLUS=14;
-    public static final int UNICODE_ESC=15;
-    public static final int WS=16;
+    public static final int MINUS=11;
+    public static final int NL=12;
+    public static final int OCTAL_ESC=13;
+    public static final int OP=14;
+    public static final int PLUS=15;
+    public static final int UNICODE_ESC=16;
+    public static final int WS=17;
 
     // delegates
     // delegators
@@ -25,7 +26,7 @@ public class PuzzleSolverLexer extends Lexer {
         return new Lexer[] {};
     }
 
-    public PuzzleSolverLexer() {}
+    public PuzzleSolverLexer() {} 
     public PuzzleSolverLexer(CharStream input) {
         this(input, new RecognizerSharedState());
     }
@@ -39,59 +40,59 @@ public class PuzzleSolverLexer extends Lexer {
         try {
             int _type = NL;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:136:4: ( ( '\\r\\n' | '\\r' | '\\n' ) )
-            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:136:6: ( '\\r\\n' | '\\r' | '\\n' )
+            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:134:4: ( ( '\\r\\n' | '\\r' | '\\n' ) )
+            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:134:6: ( '\\r\\n' | '\\r' | '\\n' )
             {
-                // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:136:6: ( '\\r\\n' | '\\r' | '\\n' )
-                int alt1=3;
-                int LA1_0 = input.LA(1);
+            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:134:6: ( '\\r\\n' | '\\r' | '\\n' )
+            int alt1=3;
+            int LA1_0 = input.LA(1);
 
-                if ( (LA1_0=='\r') ) {
-                    int LA1_1 = input.LA(2);
+            if ( (LA1_0=='\r') ) {
+                int LA1_1 = input.LA(2);
 
-                    if ( (LA1_1=='\n') ) {
-                        alt1=1;
-                    }
-                    else {
-                        alt1=2;
-                    }
-                }
-                else if ( (LA1_0=='\n') ) {
-                    alt1=3;
+                if ( (LA1_1=='\n') ) {
+                    alt1=1;
                 }
                 else {
-                    NoViableAltException nvae =
-                            new NoViableAltException("", 1, 0, input);
-
-                    throw nvae;
-
+                    alt1=2;
                 }
-                switch (alt1) {
-                    case 1 :
-                        // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:136:7: '\\r\\n'
+            }
+            else if ( (LA1_0=='\n') ) {
+                alt1=3;
+            }
+            else {
+                NoViableAltException nvae =
+                    new NoViableAltException("", 1, 0, input);
+
+                throw nvae;
+
+            }
+            switch (alt1) {
+                case 1 :
+                    // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:134:7: '\\r\\n'
                     {
-                        match("\r\n");
+                    match("\r\n"); 
 
 
 
                     }
                     break;
-                    case 2 :
-                        // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:137:12: '\\r'
+                case 2 :
+                    // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:135:12: '\\r'
                     {
-                        match('\r');
+                    match('\r'); 
 
                     }
                     break;
-                    case 3 :
-                        // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:138:11: '\\n'
+                case 3 :
+                    // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:136:11: '\\n'
                     {
-                        match('\n');
+                    match('\n'); 
 
                     }
                     break;
 
-                }
+            }
 
 
             }
@@ -100,7 +101,7 @@ public class PuzzleSolverLexer extends Lexer {
             state.channel = _channel;
         }
         finally {
-            // do for sure before leaving
+        	// do for sure before leaving
         }
     }
     // $ANTLR end "NL"
@@ -110,17 +111,17 @@ public class PuzzleSolverLexer extends Lexer {
         try {
             int _type = OP;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:141:5: ( ( '+' | '-' ) )
+            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:139:5: ( ( '+' | '-' ) )
             // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:
             {
-                if ( input.LA(1)=='+'||input.LA(1)=='-' ) {
-                    input.consume();
-                }
-                else {
-                    MismatchedSetException mse = new MismatchedSetException(null,input);
-                    recover(mse);
-                    throw mse;
-                }
+            if ( input.LA(1)=='+'||input.LA(1)=='-' ) {
+                input.consume();
+            }
+            else {
+                MismatchedSetException mse = new MismatchedSetException(null,input);
+                recover(mse);
+                throw mse;
+            }
 
 
             }
@@ -129,7 +130,7 @@ public class PuzzleSolverLexer extends Lexer {
             state.channel = _channel;
         }
         finally {
-            // do for sure before leaving
+        	// do for sure before leaving
         }
     }
     // $ANTLR end "OP"
@@ -139,17 +140,17 @@ public class PuzzleSolverLexer extends Lexer {
         try {
             int _type = ID;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:144:6: ( ( 'A' .. 'Z' ) )
+            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:142:6: ( ( 'A' .. 'Z' ) )
             // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:
             {
-                if ( (input.LA(1) >= 'A' && input.LA(1) <= 'Z') ) {
-                    input.consume();
-                }
-                else {
-                    MismatchedSetException mse = new MismatchedSetException(null,input);
-                    recover(mse);
-                    throw mse;
-                }
+            if ( (input.LA(1) >= 'A' && input.LA(1) <= 'Z') ) {
+                input.consume();
+            }
+            else {
+                MismatchedSetException mse = new MismatchedSetException(null,input);
+                recover(mse);
+                throw mse;
+            }
 
 
             }
@@ -158,7 +159,7 @@ public class PuzzleSolverLexer extends Lexer {
             state.channel = _channel;
         }
         finally {
-            // do for sure before leaving
+        	// do for sure before leaving
         }
     }
     // $ANTLR end "ID"
@@ -168,10 +169,10 @@ public class PuzzleSolverLexer extends Lexer {
         try {
             int _type = EQ;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:147:5: ( '=' )
-            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:147:7: '='
+            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:145:5: ( '=' )
+            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:145:7: '='
             {
-                match('=');
+            match('='); 
 
             }
 
@@ -179,7 +180,7 @@ public class PuzzleSolverLexer extends Lexer {
             state.channel = _channel;
         }
         finally {
-            // do for sure before leaving
+        	// do for sure before leaving
         }
     }
     // $ANTLR end "EQ"
@@ -189,20 +190,20 @@ public class PuzzleSolverLexer extends Lexer {
         try {
             int _type = WS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:151:5: ( ( ' ' | '\\t' ) )
-            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:151:9: ( ' ' | '\\t' )
+            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:149:5: ( ( ' ' | '\\t' ) )
+            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:149:9: ( ' ' | '\\t' )
             {
-                if ( input.LA(1)=='\t'||input.LA(1)==' ' ) {
-                    input.consume();
-                }
-                else {
-                    MismatchedSetException mse = new MismatchedSetException(null,input);
-                    recover(mse);
-                    throw mse;
-                }
+            if ( input.LA(1)=='\t'||input.LA(1)==' ' ) {
+                input.consume();
+            }
+            else {
+                MismatchedSetException mse = new MismatchedSetException(null,input);
+                recover(mse);
+                throw mse;
+            }
 
 
-                _channel=HIDDEN;
+            _channel=HIDDEN;
 
             }
 
@@ -210,7 +211,7 @@ public class PuzzleSolverLexer extends Lexer {
             state.channel = _channel;
         }
         finally {
-            // do for sure before leaving
+        	// do for sure before leaving
         }
     }
     // $ANTLR end "WS"
@@ -220,57 +221,57 @@ public class PuzzleSolverLexer extends Lexer {
         try {
             int _type = CHAR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:156:5: ( '\\'' ( ESC_SEQ |~ ( '\\'' | '\\\\' ) ) '\\'' )
-            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:156:8: '\\'' ( ESC_SEQ |~ ( '\\'' | '\\\\' ) ) '\\''
+            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:154:5: ( '\\'' ( ESC_SEQ |~ ( '\\'' | '\\\\' ) ) '\\'' )
+            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:154:8: '\\'' ( ESC_SEQ |~ ( '\\'' | '\\\\' ) ) '\\''
             {
-                match('\'');
+            match('\''); 
 
-                // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:156:13: ( ESC_SEQ |~ ( '\\'' | '\\\\' ) )
-                int alt2=2;
-                int LA2_0 = input.LA(1);
+            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:154:13: ( ESC_SEQ |~ ( '\\'' | '\\\\' ) )
+            int alt2=2;
+            int LA2_0 = input.LA(1);
 
-                if ( (LA2_0=='\\') ) {
-                    alt2=1;
-                }
-                else if ( ((LA2_0 >= '\u0000' && LA2_0 <= '&')||(LA2_0 >= '(' && LA2_0 <= '[')||(LA2_0 >= ']' && LA2_0 <= '\uFFFF')) ) {
-                    alt2=2;
-                }
-                else {
-                    NoViableAltException nvae =
-                            new NoViableAltException("", 2, 0, input);
+            if ( (LA2_0=='\\') ) {
+                alt2=1;
+            }
+            else if ( ((LA2_0 >= '\u0000' && LA2_0 <= '&')||(LA2_0 >= '(' && LA2_0 <= '[')||(LA2_0 >= ']' && LA2_0 <= '\uFFFF')) ) {
+                alt2=2;
+            }
+            else {
+                NoViableAltException nvae =
+                    new NoViableAltException("", 2, 0, input);
 
-                    throw nvae;
+                throw nvae;
 
-                }
-                switch (alt2) {
-                    case 1 :
-                        // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:156:15: ESC_SEQ
+            }
+            switch (alt2) {
+                case 1 :
+                    // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:154:15: ESC_SEQ
                     {
-                        mESC_SEQ();
+                    mESC_SEQ(); 
 
 
                     }
                     break;
-                    case 2 :
-                        // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:156:25: ~ ( '\\'' | '\\\\' )
+                case 2 :
+                    // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:154:25: ~ ( '\\'' | '\\\\' )
                     {
-                        if ( (input.LA(1) >= '\u0000' && input.LA(1) <= '&')||(input.LA(1) >= '(' && input.LA(1) <= '[')||(input.LA(1) >= ']' && input.LA(1) <= '\uFFFF') ) {
-                            input.consume();
-                        }
-                        else {
-                            MismatchedSetException mse = new MismatchedSetException(null,input);
-                            recover(mse);
-                            throw mse;
-                        }
+                    if ( (input.LA(1) >= '\u0000' && input.LA(1) <= '&')||(input.LA(1) >= '(' && input.LA(1) <= '[')||(input.LA(1) >= ']' && input.LA(1) <= '\uFFFF') ) {
+                        input.consume();
+                    }
+                    else {
+                        MismatchedSetException mse = new MismatchedSetException(null,input);
+                        recover(mse);
+                        throw mse;
+                    }
 
 
                     }
                     break;
 
-                }
+            }
 
 
-                match('\'');
+            match('\''); 
 
             }
 
@@ -278,7 +279,7 @@ public class PuzzleSolverLexer extends Lexer {
             state.channel = _channel;
         }
         finally {
-            // do for sure before leaving
+        	// do for sure before leaving
         }
     }
     // $ANTLR end "CHAR"
@@ -286,17 +287,17 @@ public class PuzzleSolverLexer extends Lexer {
     // $ANTLR start "HEX_DIGIT"
     public final void mHEX_DIGIT() throws RecognitionException {
         try {
-            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:161:11: ( ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' ) )
+            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:159:11: ( ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' ) )
             // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:
             {
-                if ( (input.LA(1) >= '0' && input.LA(1) <= '9')||(input.LA(1) >= 'A' && input.LA(1) <= 'F')||(input.LA(1) >= 'a' && input.LA(1) <= 'f') ) {
-                    input.consume();
-                }
-                else {
-                    MismatchedSetException mse = new MismatchedSetException(null,input);
-                    recover(mse);
-                    throw mse;
-                }
+            if ( (input.LA(1) >= '0' && input.LA(1) <= '9')||(input.LA(1) >= 'A' && input.LA(1) <= 'F')||(input.LA(1) >= 'a' && input.LA(1) <= 'f') ) {
+                input.consume();
+            }
+            else {
+                MismatchedSetException mse = new MismatchedSetException(null,input);
+                recover(mse);
+                throw mse;
+            }
 
 
             }
@@ -304,7 +305,7 @@ public class PuzzleSolverLexer extends Lexer {
 
         }
         finally {
-            // do for sure before leaving
+        	// do for sure before leaving
         }
     }
     // $ANTLR end "HEX_DIGIT"
@@ -312,62 +313,62 @@ public class PuzzleSolverLexer extends Lexer {
     // $ANTLR start "ESC_SEQ"
     public final void mESC_SEQ() throws RecognitionException {
         try {
-            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:165:5: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' ) | UNICODE_ESC | OCTAL_ESC )
+            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:163:5: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' ) | UNICODE_ESC | OCTAL_ESC )
             int alt3=3;
             int LA3_0 = input.LA(1);
 
             if ( (LA3_0=='\\') ) {
                 switch ( input.LA(2) ) {
-                    case '\"':
-                    case '\'':
-                    case '\\':
-                    case 'b':
-                    case 'f':
-                    case 'n':
-                    case 'r':
-                    case 't':
+                case '\"':
+                case '\'':
+                case '\\':
+                case 'b':
+                case 'f':
+                case 'n':
+                case 'r':
+                case 't':
                     {
-                        alt3=1;
+                    alt3=1;
                     }
                     break;
-                    case 'u':
+                case 'u':
                     {
-                        alt3=2;
+                    alt3=2;
                     }
                     break;
-                    case '0':
-                    case '1':
-                    case '2':
-                    case '3':
-                    case '4':
-                    case '5':
-                    case '6':
-                    case '7':
+                case '0':
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
                     {
-                        alt3=3;
+                    alt3=3;
                     }
                     break;
-                    default:
-                        NoViableAltException nvae =
-                                new NoViableAltException("", 3, 1, input);
+                default:
+                    NoViableAltException nvae =
+                        new NoViableAltException("", 3, 1, input);
 
-                        throw nvae;
+                    throw nvae;
 
                 }
 
             }
             else {
                 NoViableAltException nvae =
-                        new NoViableAltException("", 3, 0, input);
+                    new NoViableAltException("", 3, 0, input);
 
                 throw nvae;
 
             }
             switch (alt3) {
                 case 1 :
-                    // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:165:9: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' )
-                {
-                    match('\\');
+                    // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:163:9: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' )
+                    {
+                    match('\\'); 
 
                     if ( input.LA(1)=='\"'||input.LA(1)=='\''||input.LA(1)=='\\'||input.LA(1)=='b'||input.LA(1)=='f'||input.LA(1)=='n'||input.LA(1)=='r'||input.LA(1)=='t' ) {
                         input.consume();
@@ -379,30 +380,30 @@ public class PuzzleSolverLexer extends Lexer {
                     }
 
 
-                }
-                break;
+                    }
+                    break;
                 case 2 :
-                    // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:166:9: UNICODE_ESC
-                {
-                    mUNICODE_ESC();
+                    // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:164:9: UNICODE_ESC
+                    {
+                    mUNICODE_ESC(); 
 
 
-                }
-                break;
+                    }
+                    break;
                 case 3 :
-                    // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:167:9: OCTAL_ESC
-                {
-                    mOCTAL_ESC();
+                    // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:165:9: OCTAL_ESC
+                    {
+                    mOCTAL_ESC(); 
 
 
-                }
-                break;
+                    }
+                    break;
 
             }
 
         }
         finally {
-            // do for sure before leaving
+        	// do for sure before leaving
         }
     }
     // $ANTLR end "ESC_SEQ"
@@ -410,7 +411,7 @@ public class PuzzleSolverLexer extends Lexer {
     // $ANTLR start "OCTAL_ESC"
     public final void mOCTAL_ESC() throws RecognitionException {
         try {
-            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:172:5: ( '\\\\' ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | '\\\\' ( '0' .. '7' ) ( '0' .. '7' ) | '\\\\' ( '0' .. '7' ) )
+            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:170:5: ( '\\\\' ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | '\\\\' ( '0' .. '7' ) ( '0' .. '7' ) | '\\\\' ( '0' .. '7' ) )
             int alt4=3;
             int LA4_0 = input.LA(1);
 
@@ -446,7 +447,7 @@ public class PuzzleSolverLexer extends Lexer {
                 }
                 else {
                     NoViableAltException nvae =
-                            new NoViableAltException("", 4, 1, input);
+                        new NoViableAltException("", 4, 1, input);
 
                     throw nvae;
 
@@ -454,16 +455,16 @@ public class PuzzleSolverLexer extends Lexer {
             }
             else {
                 NoViableAltException nvae =
-                        new NoViableAltException("", 4, 0, input);
+                    new NoViableAltException("", 4, 0, input);
 
                 throw nvae;
 
             }
             switch (alt4) {
                 case 1 :
-                    // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:172:9: '\\\\' ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' )
-                {
-                    match('\\');
+                    // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:170:9: '\\\\' ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' )
+                    {
+                    match('\\'); 
 
                     if ( (input.LA(1) >= '0' && input.LA(1) <= '3') ) {
                         input.consume();
@@ -495,12 +496,12 @@ public class PuzzleSolverLexer extends Lexer {
                     }
 
 
-                }
-                break;
+                    }
+                    break;
                 case 2 :
-                    // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:173:9: '\\\\' ( '0' .. '7' ) ( '0' .. '7' )
-                {
-                    match('\\');
+                    // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:171:9: '\\\\' ( '0' .. '7' ) ( '0' .. '7' )
+                    {
+                    match('\\'); 
 
                     if ( (input.LA(1) >= '0' && input.LA(1) <= '7') ) {
                         input.consume();
@@ -522,12 +523,12 @@ public class PuzzleSolverLexer extends Lexer {
                     }
 
 
-                }
-                break;
+                    }
+                    break;
                 case 3 :
-                    // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:174:9: '\\\\' ( '0' .. '7' )
-                {
-                    match('\\');
+                    // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:172:9: '\\\\' ( '0' .. '7' )
+                    {
+                    match('\\'); 
 
                     if ( (input.LA(1) >= '0' && input.LA(1) <= '7') ) {
                         input.consume();
@@ -539,14 +540,14 @@ public class PuzzleSolverLexer extends Lexer {
                     }
 
 
-                }
-                break;
+                    }
+                    break;
 
             }
 
         }
         finally {
-            // do for sure before leaving
+        	// do for sure before leaving
         }
     }
     // $ANTLR end "OCTAL_ESC"
@@ -554,23 +555,23 @@ public class PuzzleSolverLexer extends Lexer {
     // $ANTLR start "UNICODE_ESC"
     public final void mUNICODE_ESC() throws RecognitionException {
         try {
-            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:179:5: ( '\\\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT )
-            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:179:9: '\\\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT
+            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:177:5: ( '\\\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT )
+            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:177:9: '\\\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT
             {
-                match('\\');
+            match('\\'); 
 
-                match('u');
+            match('u'); 
 
-                mHEX_DIGIT();
-
-
-                mHEX_DIGIT();
+            mHEX_DIGIT(); 
 
 
-                mHEX_DIGIT();
+            mHEX_DIGIT(); 
 
 
-                mHEX_DIGIT();
+            mHEX_DIGIT(); 
+
+
+            mHEX_DIGIT(); 
 
 
             }
@@ -578,7 +579,7 @@ public class PuzzleSolverLexer extends Lexer {
 
         }
         finally {
-            // do for sure before leaving
+        	// do for sure before leaving
         }
     }
     // $ANTLR end "UNICODE_ESC"
@@ -587,127 +588,127 @@ public class PuzzleSolverLexer extends Lexer {
         // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:1:8: ( NL | OP | ID | EQ | WS | CHAR )
         int alt5=6;
         switch ( input.LA(1) ) {
-            case '\n':
-            case '\r':
+        case '\n':
+        case '\r':
             {
-                alt5=1;
+            alt5=1;
             }
             break;
-            case '+':
-            case '-':
+        case '+':
+        case '-':
             {
-                alt5=2;
+            alt5=2;
             }
             break;
-            case 'A':
-            case 'B':
-            case 'C':
-            case 'D':
-            case 'E':
-            case 'F':
-            case 'G':
-            case 'H':
-            case 'I':
-            case 'J':
-            case 'K':
-            case 'L':
-            case 'M':
-            case 'N':
-            case 'O':
-            case 'P':
-            case 'Q':
-            case 'R':
-            case 'S':
-            case 'T':
-            case 'U':
-            case 'V':
-            case 'W':
-            case 'X':
-            case 'Y':
-            case 'Z':
+        case 'A':
+        case 'B':
+        case 'C':
+        case 'D':
+        case 'E':
+        case 'F':
+        case 'G':
+        case 'H':
+        case 'I':
+        case 'J':
+        case 'K':
+        case 'L':
+        case 'M':
+        case 'N':
+        case 'O':
+        case 'P':
+        case 'Q':
+        case 'R':
+        case 'S':
+        case 'T':
+        case 'U':
+        case 'V':
+        case 'W':
+        case 'X':
+        case 'Y':
+        case 'Z':
             {
-                alt5=3;
+            alt5=3;
             }
             break;
-            case '=':
+        case '=':
             {
-                alt5=4;
+            alt5=4;
             }
             break;
-            case '\t':
-            case ' ':
+        case '\t':
+        case ' ':
             {
-                alt5=5;
+            alt5=5;
             }
             break;
-            case '\'':
+        case '\'':
             {
-                alt5=6;
+            alt5=6;
             }
             break;
-            default:
-                NoViableAltException nvae =
-                        new NoViableAltException("", 5, 0, input);
+        default:
+            NoViableAltException nvae =
+                new NoViableAltException("", 5, 0, input);
 
-                throw nvae;
+            throw nvae;
 
         }
 
         switch (alt5) {
             case 1 :
                 // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:1:10: NL
-            {
-                mNL();
+                {
+                mNL(); 
 
 
-            }
-            break;
+                }
+                break;
             case 2 :
                 // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:1:13: OP
-            {
-                mOP();
+                {
+                mOP(); 
 
 
-            }
-            break;
+                }
+                break;
             case 3 :
                 // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:1:16: ID
-            {
-                mID();
+                {
+                mID(); 
 
 
-            }
-            break;
+                }
+                break;
             case 4 :
                 // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:1:19: EQ
-            {
-                mEQ();
+                {
+                mEQ(); 
 
 
-            }
-            break;
+                }
+                break;
             case 5 :
                 // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:1:22: WS
-            {
-                mWS();
+                {
+                mWS(); 
 
 
-            }
-            break;
+                }
+                break;
             case 6 :
                 // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolver.g:1:25: CHAR
-            {
-                mCHAR();
+                {
+                mCHAR(); 
 
 
-            }
-            break;
+                }
+                break;
 
         }
 
     }
 
 
-
+ 
 
 }
