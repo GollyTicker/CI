@@ -1,12 +1,15 @@
 package antlrmain;
 
+import choco.Choco;
+import choco.Options;
+import choco.cp.solver.constraints.global.geost.geometricPrim.Obj;
 import choco.kernel.model.constraints.Constraint;
+import choco.kernel.model.variables.integer.IntegerExpressionVariable;
+import choco.kernel.model.variables.integer.IntegerVariable;
 import choco.kernel.solver.Solver;
 import org.antlr.runtime.tree.CommonTree;
 
-
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Created by kbrusch on 6/7/14.
@@ -21,33 +24,133 @@ public class DSLSolverA4 {
 
     }
 
+    private static final Character DUMMY_CHAR = new Character('_');
+
     private static Solver mkModel(List<Constraint> conds) {
         // T O DD O
         return null;
     }
 
-    public static List<Constraint> toConstraints(CommonTree tree){
+    public static List<Constraint> toConstraints(CommonTree tree) {
 
-        for (Object child:tree.getChildren()) {
-            CommonTree plus = (CommonTree)child;
-            CommonTree block_0 = (CommonTree) plus.getChild(0);
-            CommonTree block_1 = (CommonTree) plus.getChild(1);
-            CommonTree block_2 = (CommonTree) plus.getChild(2);
+        List<Constraint> constraints = new ArrayList<>();
+
+        for (Object child : tree.getChildren()) {
+
+            CommonTree plus = (CommonTree) child;
+            List<CommonTree> blockTrees = (List<CommonTree>) plus.getChildren();
 
             System.out.println("Plus: " + plus.toStringTree());
 
-            List<Character> chars_0 = (List<Character>) block_0.getChildren();
-            List<Character> chars_1 = (List<Character>) block_1.getChildren();
-            List<Character> chars_2 = (List<Character>) block_2.getChildren();
+            List<List<Character>> blocks_unnormalized = new ArrayList<>();
+            for (CommonTree block:blockTrees) {
+                List<Character> chars = new ArrayList<>();
+                for(Object _char:block.getChildren()) {
+                    chars.add(((CommonTree)_char).getText().charAt(0));
+                }
+                blocks_unnormalized.add(chars);
+            }
+            List<List<Character>> blocks = normalizeLengths(blocks_unnormalized);
 
-            System.out.println("Letters 0: " + chars_0.toString());
-            System.out.println("Letters 1: " + chars_1.toString());
-            System.out.println("Letters 2: " + chars_2.toString());
+            System.out.println(blocks);
 
+            Map<Character, IntegerVariable> intVars = new HashMap<>();
+
+            // Declare every letter as a variable
+            //IntegerVariable d = Choco.makeIntVar("d", 0, 9, Options.V_ENUM);
+            for (List<Character> chars:blocks) {
+                for (Character c : chars) {
+                    if(c.equals(DUMMY_CHAR)) {
+                        intVars.put(c, Choco.makeIntVar(c.toString(), 0, 0, Options.V_ENUM));
+                    }
+                    else {
+                        intVars.put(c, Choco.makeIntVar(c.toString(), 0, 9, Options.V_ENUM));
+                    }
+                }
+            }
+
+            // declare carry constraints
+            IntegerVariable c0 = Choco.makeIntVar("c0", 0, 0, Options.V_ENUM);
+            IntegerVariable c1 = Choco.makeIntVar("c1", 0, 1, Options.V_ENUM);
+            IntegerVariable c2 = Choco.makeIntVar("c2", 0, 1, Options.V_ENUM);
+            IntegerVariable c3 = Choco.makeIntVar("c3", 0, 1, Options.V_ENUM);
+            IntegerVariable c4 = Choco.makeIntVar("c4", 0, 1, Options.V_ENUM);
+            IntegerVariable c5 = Choco.makeIntVar("c5", 0, 1, Options.V_ENUM);
+            IntegerVariable c6 = Choco.makeIntVar("c6", 0, 0, Options.V_ENUM);
+
+            // wir haben einen carry constraint mehr als es buchstaben gibt
+            Map<Character, IntegerVariable> carries = new HashMap<>();
+            // for (int i = 0; i < ;i++)
+
+            // TODO: was passiert wenn die blöcke unterschiedlich lang sind?
+/*
+
+
+
+
+
+            IntegerVariable donald = Choco.makeIntVar("donald", 0, 1000000, Options.V_BOUND);
+            IntegerVariable gerald = Choco.makeIntVar("gerald", 0, 1000000, Options.V_BOUND);
+
+            IntegerVariable robert = Choco.makeIntVar("robert", 0, 1000000, Options.V_BOUND);
+
+
+            int[] c = new int[]{100000, 10000, 1000, 100, 10, 1};
+
+            // Declare every combination of letter as an integer expression
+            IntegerExpressionVariable donaldLetters = Choco.scalar(new IntegerVariable[]{d, o, n, a,
+                    l, d}, c);
+            IntegerExpressionVariable geraldLetters = Choco.scalar(new IntegerVariable[]{g, e, r, a,
+                    l, d}, c);
+            IntegerExpressionVariable robertLetters = Choco.scalar(new IntegerVariable[]{r, o, b, e,
+                    r, t}, c);
+            // Add equality between name and letters combination
+
+
+            model.addConstraint(Choco.eq(donaldLetters, donald));
+            model.addConstraint(Choco.eq(geraldLetters, gerald));
+            model.addConstraint(Choco.eq(robertLetters, robert));
+
+
+            // Constant of coefficients
+            int constant = 10;
+
+            model.addConstraint(Choco.gt(d, 0));
+            model.addConstraint(Choco.gt(g, 0));
+            model.addConstraint(Choco.gt(r, 0));
+
+            IntegerExpressionVariable one_1 = Choco.plus(Choco.plus(d, d), c0);
+            IntegerExpressionVariable two_1 = Choco.plus(t, Choco.mult(c1, constant));
+
+            constraints.add(Choco.eq(one_1, two_1));
+            */
         }
 
 
-     return null;
+        return null;
+    }
+
+    private static List<List<Character>> normalizeLengths(List<List<Character>> blocks) {
+        List<List<Character>> blocks_ret = new ArrayList<>();
+
+        int maxLength = 0;
+        for (List<Character> chars:blocks) {
+            maxLength = Math.max(maxLength, chars.size());
+        }
+
+        // prepend dummy Characters
+        for (List<Character> chars:blocks) {
+            int missing = maxLength - chars.size();
+            List<Character> fixedSize = new ArrayList<>(chars);
+            Collections.reverse(fixedSize);
+            for (int i = 0; i < missing; i++) {
+                fixedSize.add(DUMMY_CHAR);
+            }
+            Collections.reverse(fixedSize);
+            blocks_ret.add(fixedSize);
+        }
+
+        return blocks_ret;
     }
 
 }
