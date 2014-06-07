@@ -6,7 +6,7 @@ import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.CommonTreeNodeStream;
-
+import static antlrmain.DSLSolverA4.*;
 import javax.xml.transform.sax.SAXSource;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -41,9 +41,11 @@ public class AntlrMain {
         System.out.println("generatued old AST: " + t.toStringTree());
         CommonTreeNodeStream nodes = new CommonTreeNodeStream(t);
         System.out.println("generatued node stream");
-        PuzzleSolverTreeGrammar walker = new PuzzleSolverTreeGrammar(nodes);
-        CommonTree normalized = (CommonTree)walker.walk().getTree();
+        PuzzleSolverTreeGrammar progger = new PuzzleSolverTreeGrammar(nodes);
+        CommonTree normalized = (CommonTree)progger.prog().getTree();
         System.out.println("Normalized AST: " + normalized.toStringTree());
+
+        solveFromTree(normalized);
 
     }
 }

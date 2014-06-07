@@ -1,14 +1,17 @@
-// $ANTLR 3.4 /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolverTreeGrammar.g 2014-05-19 11:18:33
 package antlrmain;
+// $ANTLR 3.4 /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolverTreeGrammar.g 2014-06-07 13:09:36
 
 import org.antlr.runtime.*;
 import org.antlr.runtime.tree.*;
+import java.util.Stack;
+import java.util.List;
+import java.util.ArrayList;
 
 
 @SuppressWarnings({"all", "warnings", "unchecked"})
 public class PuzzleSolverTreeGrammar extends TreeParser {
     public static final String[] tokenNames = new String[] {
-        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "BLOCK", "CHAR", "CONDS", "EQ", "ESC_SEQ", "HEX_DIGIT", "ID", "MINUS", "NL", "OCTAL_ESC", "OP", "PLUS", "UNICODE_ESC", "WS"
+        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "BLOCK", "CHAR", "CONDS", "EQ", "ESC_SEQ", "HEX_DIGIT", "ID", "NL", "OCTAL_ESC", "OP", "UNICODE_ESC", "WS", "PLUS"
     };
 
     public static final int EOF=-1;
@@ -19,13 +22,12 @@ public class PuzzleSolverTreeGrammar extends TreeParser {
     public static final int ESC_SEQ=8;
     public static final int HEX_DIGIT=9;
     public static final int ID=10;
-    public static final int MINUS=11;
-    public static final int NL=12;
-    public static final int OCTAL_ESC=13;
-    public static final int OP=14;
-    public static final int PLUS=15;
-    public static final int UNICODE_ESC=16;
-    public static final int WS=17;
+    public static final int NL=11;
+    public static final int OCTAL_ESC=12;
+    public static final int OP=13;
+    public static final int UNICODE_ESC=14;
+    public static final int WS=15;
+    public static final int PLUS=16;
 
     // delegates
     public TreeParser[] getDelegates() {
@@ -54,16 +56,16 @@ public TreeAdaptor getTreeAdaptor() {
     public String getGrammarFileName() { return "/Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolverTreeGrammar.g"; }
 
 
-    public static class walk_return extends TreeRuleReturnScope {
+    public static class prog_return extends TreeRuleReturnScope {
         CommonTree tree;
         public Object getTree() { return tree; }
     };
 
 
-    // $ANTLR start "walk"
-    // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolverTreeGrammar.g:10:1: walk : ^( CONDS ( rule )* ) ;
-    public final PuzzleSolverTreeGrammar.walk_return walk() throws RecognitionException {
-        PuzzleSolverTreeGrammar.walk_return retval = new PuzzleSolverTreeGrammar.walk_return();
+    // $ANTLR start "prog"
+    // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolverTreeGrammar.g:14:1: prog : ^( CONDS rule rule rule rule rule rule ) ;
+    public final PuzzleSolverTreeGrammar.prog_return prog() throws RecognitionException {
+        PuzzleSolverTreeGrammar.prog_return retval = new PuzzleSolverTreeGrammar.prog_return();
         retval.start = input.LT(1);
 
 
@@ -75,12 +77,22 @@ public TreeAdaptor getTreeAdaptor() {
         CommonTree CONDS1=null;
         PuzzleSolverTreeGrammar.rule_return rule2 =null;
 
+        PuzzleSolverTreeGrammar.rule_return rule3 =null;
+
+        PuzzleSolverTreeGrammar.rule_return rule4 =null;
+
+        PuzzleSolverTreeGrammar.rule_return rule5 =null;
+
+        PuzzleSolverTreeGrammar.rule_return rule6 =null;
+
+        PuzzleSolverTreeGrammar.rule_return rule7 =null;
+
 
         CommonTree CONDS1_tree=null;
 
         try {
-            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolverTreeGrammar.g:10:7: ( ^( CONDS ( rule )* ) )
-            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolverTreeGrammar.g:10:9: ^( CONDS ( rule )* )
+            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolverTreeGrammar.g:14:7: ( ^( CONDS rule rule rule rule rule rule ) )
+            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolverTreeGrammar.g:14:9: ^( CONDS rule rule rule rule rule rule )
             {
             root_0 = (CommonTree)adaptor.nil();
 
@@ -91,50 +103,69 @@ public TreeAdaptor getTreeAdaptor() {
             CommonTree _first_1 = null;
             CommonTree root_1 = (CommonTree)adaptor.nil();
             _last = (CommonTree)input.LT(1);
-            CONDS1=(CommonTree)match(input,CONDS,FOLLOW_CONDS_in_walk41); 
+            CONDS1=(CommonTree)match(input,CONDS,FOLLOW_CONDS_in_prog51); 
             CONDS1_tree = (CommonTree)adaptor.dupNode(CONDS1);
 
 
             root_1 = (CommonTree)adaptor.becomeRoot(CONDS1_tree, root_1);
 
 
-            if ( input.LA(1)==Token.DOWN ) {
-                match(input, Token.DOWN, null); 
-                // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolverTreeGrammar.g:10:17: ( rule )*
-                loop1:
-                do {
-                    int alt1=2;
-                    int LA1_0 = input.LA(1);
+            match(input, Token.DOWN, null); 
+            _last = (CommonTree)input.LT(1);
+            pushFollow(FOLLOW_rule_in_prog53);
+            rule2=rule();
 
-                    if ( (LA1_0==MINUS||LA1_0==PLUS) ) {
-                        alt1=1;
-                    }
+            state._fsp--;
+
+            adaptor.addChild(root_1, rule2.getTree());
 
 
-                    switch (alt1) {
-                	case 1 :
-                	    // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolverTreeGrammar.g:10:17: rule
-                	    {
-                	    _last = (CommonTree)input.LT(1);
-                	    pushFollow(FOLLOW_rule_in_walk43);
-                	    rule2=rule();
+            _last = (CommonTree)input.LT(1);
+            pushFollow(FOLLOW_rule_in_prog55);
+            rule3=rule();
 
-                	    state._fsp--;
+            state._fsp--;
 
-                	    adaptor.addChild(root_1, rule2.getTree());
+            adaptor.addChild(root_1, rule3.getTree());
 
 
-                	    }
-                	    break;
+            _last = (CommonTree)input.LT(1);
+            pushFollow(FOLLOW_rule_in_prog57);
+            rule4=rule();
 
-                	default :
-                	    break loop1;
-                    }
-                } while (true);
+            state._fsp--;
+
+            adaptor.addChild(root_1, rule4.getTree());
 
 
-                match(input, Token.UP, null); 
-            }
+            _last = (CommonTree)input.LT(1);
+            pushFollow(FOLLOW_rule_in_prog59);
+            rule5=rule();
+
+            state._fsp--;
+
+            adaptor.addChild(root_1, rule5.getTree());
+
+
+            _last = (CommonTree)input.LT(1);
+            pushFollow(FOLLOW_rule_in_prog61);
+            rule6=rule();
+
+            state._fsp--;
+
+            adaptor.addChild(root_1, rule6.getTree());
+
+
+            _last = (CommonTree)input.LT(1);
+            pushFollow(FOLLOW_rule_in_prog63);
+            rule7=rule();
+
+            state._fsp--;
+
+            adaptor.addChild(root_1, rule7.getTree());
+
+
+            match(input, Token.UP, null); 
             adaptor.addChild(root_0, root_1);
             _last = _save_last_1;
             }
@@ -155,7 +186,7 @@ public TreeAdaptor getTreeAdaptor() {
         }
         return retval;
     }
-    // $ANTLR end "walk"
+    // $ANTLR end "prog"
 
 
     public static class rule_return extends TreeRuleReturnScope {
@@ -165,7 +196,7 @@ public TreeAdaptor getTreeAdaptor() {
 
 
     // $ANTLR start "rule"
-    // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolverTreeGrammar.g:14:1: rule : ( ^( PLUS BLOCK BLOCK BLOCK ) | ^( MINUS l= BLOCK m= BLOCK r= BLOCK ) -> ^( PLUS $m $r $l) );
+    // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolverTreeGrammar.g:18:1: rule : ^(op= OP l= block m= block r= block ) -> {$op.text.trim().equals(\"-\")}? ^( PLUS[\"+\"] $m $r $l) -> ^( PLUS[\"+\"] $l $m $r) ;
     public final PuzzleSolverTreeGrammar.rule_return rule() throws RecognitionException {
         PuzzleSolverTreeGrammar.rule_return retval = new PuzzleSolverTreeGrammar.rule_return();
         retval.start = input.LT(1);
@@ -176,173 +207,121 @@ public TreeAdaptor getTreeAdaptor() {
         CommonTree _first_0 = null;
         CommonTree _last = null;
 
-        CommonTree l=null;
-        CommonTree m=null;
-        CommonTree r=null;
-        CommonTree PLUS3=null;
-        CommonTree BLOCK4=null;
-        CommonTree BLOCK5=null;
-        CommonTree BLOCK6=null;
-        CommonTree MINUS7=null;
+        CommonTree op=null;
+        PuzzleSolverTreeGrammar.block_return l =null;
 
-        CommonTree l_tree=null;
-        CommonTree m_tree=null;
-        CommonTree r_tree=null;
-        CommonTree PLUS3_tree=null;
-        CommonTree BLOCK4_tree=null;
-        CommonTree BLOCK5_tree=null;
-        CommonTree BLOCK6_tree=null;
-        CommonTree MINUS7_tree=null;
-        RewriteRuleNodeStream stream_MINUS=new RewriteRuleNodeStream(adaptor,"token MINUS");
-        RewriteRuleNodeStream stream_BLOCK=new RewriteRuleNodeStream(adaptor,"token BLOCK");
+        PuzzleSolverTreeGrammar.block_return m =null;
 
+        PuzzleSolverTreeGrammar.block_return r =null;
+
+
+        CommonTree op_tree=null;
+        RewriteRuleNodeStream stream_OP=new RewriteRuleNodeStream(adaptor,"token OP");
+        RewriteRuleSubtreeStream stream_block=new RewriteRuleSubtreeStream(adaptor,"rule block");
         try {
-            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolverTreeGrammar.g:14:7: ( ^( PLUS BLOCK BLOCK BLOCK ) | ^( MINUS l= BLOCK m= BLOCK r= BLOCK ) -> ^( PLUS $m $r $l) )
-            int alt2=2;
-            int LA2_0 = input.LA(1);
+            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolverTreeGrammar.g:18:7: ( ^(op= OP l= block m= block r= block ) -> {$op.text.trim().equals(\"-\")}? ^( PLUS[\"+\"] $m $r $l) -> ^( PLUS[\"+\"] $l $m $r) )
+            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolverTreeGrammar.g:18:9: ^(op= OP l= block m= block r= block )
+            {
+            _last = (CommonTree)input.LT(1);
+            {
+            CommonTree _save_last_1 = _last;
+            CommonTree _first_1 = null;
+            CommonTree root_1 = (CommonTree)adaptor.nil();
+            _last = (CommonTree)input.LT(1);
+            op=(CommonTree)match(input,OP,FOLLOW_OP_in_rule78);  
+            stream_OP.add(op);
 
-            if ( (LA2_0==PLUS) ) {
-                alt2=1;
+
+            match(input, Token.DOWN, null); 
+            _last = (CommonTree)input.LT(1);
+            pushFollow(FOLLOW_block_in_rule82);
+            l=block();
+
+            state._fsp--;
+
+            stream_block.add(l.getTree());
+
+            _last = (CommonTree)input.LT(1);
+            pushFollow(FOLLOW_block_in_rule86);
+            m=block();
+
+            state._fsp--;
+
+            stream_block.add(m.getTree());
+
+            _last = (CommonTree)input.LT(1);
+            pushFollow(FOLLOW_block_in_rule90);
+            r=block();
+
+            state._fsp--;
+
+            stream_block.add(r.getTree());
+
+            match(input, Token.UP, null); 
+            adaptor.addChild(root_0, root_1);
+            _last = _save_last_1;
             }
-            else if ( (LA2_0==MINUS) ) {
-                alt2=2;
-            }
-            else {
-                NoViableAltException nvae =
-                    new NoViableAltException("", 2, 0, input);
-
-                throw nvae;
-
-            }
-            switch (alt2) {
-                case 1 :
-                    // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolverTreeGrammar.g:14:9: ^( PLUS BLOCK BLOCK BLOCK )
-                    {
-                    root_0 = (CommonTree)adaptor.nil();
 
 
-                    _last = (CommonTree)input.LT(1);
-                    {
-                    CommonTree _save_last_1 = _last;
-                    CommonTree _first_1 = null;
-                    CommonTree root_1 = (CommonTree)adaptor.nil();
-                    _last = (CommonTree)input.LT(1);
-                    PLUS3=(CommonTree)match(input,PLUS,FOLLOW_PLUS_in_rule57); 
-                    PLUS3_tree = (CommonTree)adaptor.dupNode(PLUS3);
+            // AST REWRITE
+            // elements: r, m, l, r, m, l
+            // token labels: 
+            // rule labels: retval, r, l, m
+            // token list labels: 
+            // rule list labels: 
+            // wildcard labels: 
+            retval.tree = root_0;
+            RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
+            RewriteRuleSubtreeStream stream_r=new RewriteRuleSubtreeStream(adaptor,"rule r",r!=null?r.tree:null);
+            RewriteRuleSubtreeStream stream_l=new RewriteRuleSubtreeStream(adaptor,"rule l",l!=null?l.tree:null);
+            RewriteRuleSubtreeStream stream_m=new RewriteRuleSubtreeStream(adaptor,"rule m",m!=null?m.tree:null);
 
+            root_0 = (CommonTree)adaptor.nil();
+            // 19:2: -> {$op.text.trim().equals(\"-\")}? ^( PLUS[\"+\"] $m $r $l)
+            if ((op!=null?op.getText():null).trim().equals("-")) {
+                // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolverTreeGrammar.g:19:36: ^( PLUS[\"+\"] $m $r $l)
+                {
+                CommonTree root_1 = (CommonTree)adaptor.nil();
+                root_1 = (CommonTree)adaptor.becomeRoot(
+                (CommonTree)adaptor.create(PLUS, "+")
+                , root_1);
 
-                    root_1 = (CommonTree)adaptor.becomeRoot(PLUS3_tree, root_1);
+                adaptor.addChild(root_1, stream_m.nextTree());
 
+                adaptor.addChild(root_1, stream_r.nextTree());
 
-                    match(input, Token.DOWN, null); 
-                    _last = (CommonTree)input.LT(1);
-                    BLOCK4=(CommonTree)match(input,BLOCK,FOLLOW_BLOCK_in_rule59); 
-                    BLOCK4_tree = (CommonTree)adaptor.dupNode(BLOCK4);
+                adaptor.addChild(root_1, stream_l.nextTree());
 
-
-                    adaptor.addChild(root_1, BLOCK4_tree);
-
-
-                    _last = (CommonTree)input.LT(1);
-                    BLOCK5=(CommonTree)match(input,BLOCK,FOLLOW_BLOCK_in_rule61); 
-                    BLOCK5_tree = (CommonTree)adaptor.dupNode(BLOCK5);
-
-
-                    adaptor.addChild(root_1, BLOCK5_tree);
-
-
-                    _last = (CommonTree)input.LT(1);
-                    BLOCK6=(CommonTree)match(input,BLOCK,FOLLOW_BLOCK_in_rule63); 
-                    BLOCK6_tree = (CommonTree)adaptor.dupNode(BLOCK6);
-
-
-                    adaptor.addChild(root_1, BLOCK6_tree);
-
-
-                    match(input, Token.UP, null); 
-                    adaptor.addChild(root_0, root_1);
-                    _last = _save_last_1;
-                    }
-
-
-                    }
-                    break;
-                case 2 :
-                    // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolverTreeGrammar.g:15:5: ^( MINUS l= BLOCK m= BLOCK r= BLOCK )
-                    {
-                    _last = (CommonTree)input.LT(1);
-                    {
-                    CommonTree _save_last_1 = _last;
-                    CommonTree _first_1 = null;
-                    CommonTree root_1 = (CommonTree)adaptor.nil();
-                    _last = (CommonTree)input.LT(1);
-                    MINUS7=(CommonTree)match(input,MINUS,FOLLOW_MINUS_in_rule72);  
-                    stream_MINUS.add(MINUS7);
-
-
-                    match(input, Token.DOWN, null); 
-                    _last = (CommonTree)input.LT(1);
-                    l=(CommonTree)match(input,BLOCK,FOLLOW_BLOCK_in_rule76);  
-                    stream_BLOCK.add(l);
-
-
-                    _last = (CommonTree)input.LT(1);
-                    m=(CommonTree)match(input,BLOCK,FOLLOW_BLOCK_in_rule80);  
-                    stream_BLOCK.add(m);
-
-
-                    _last = (CommonTree)input.LT(1);
-                    r=(CommonTree)match(input,BLOCK,FOLLOW_BLOCK_in_rule84);  
-                    stream_BLOCK.add(r);
-
-
-                    match(input, Token.UP, null); 
-                    adaptor.addChild(root_0, root_1);
-                    _last = _save_last_1;
-                    }
-
-
-                    // AST REWRITE
-                    // elements: r, l, m
-                    // token labels: r, l, m
-                    // rule labels: retval
-                    // token list labels: 
-                    // rule list labels: 
-                    // wildcard labels: 
-                    retval.tree = root_0;
-                    RewriteRuleNodeStream stream_r=new RewriteRuleNodeStream(adaptor,"token r",r);
-                    RewriteRuleNodeStream stream_l=new RewriteRuleNodeStream(adaptor,"token l",l);
-                    RewriteRuleNodeStream stream_m=new RewriteRuleNodeStream(adaptor,"token m",m);
-                    RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.tree:null);
-
-                    root_0 = (CommonTree)adaptor.nil();
-                    // 15:38: -> ^( PLUS $m $r $l)
-                    {
-                        // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolverTreeGrammar.g:15:41: ^( PLUS $m $r $l)
-                        {
-                        CommonTree root_1 = (CommonTree)adaptor.nil();
-                        root_1 = (CommonTree)adaptor.becomeRoot(
-                        (CommonTree)adaptor.create(PLUS, "PLUS")
-                        , root_1);
-
-                        adaptor.addChild(root_1, stream_m.nextNode());
-
-                        adaptor.addChild(root_1, stream_r.nextNode());
-
-                        adaptor.addChild(root_1, stream_l.nextNode());
-
-                        adaptor.addChild(root_0, root_1);
-                        }
-
-                    }
-
-
-                    retval.tree = root_0;
-
-                    }
-                    break;
+                adaptor.addChild(root_0, root_1);
+                }
 
             }
+
+            else // 20:2: -> ^( PLUS[\"+\"] $l $m $r)
+            {
+                // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolverTreeGrammar.g:20:5: ^( PLUS[\"+\"] $l $m $r)
+                {
+                CommonTree root_1 = (CommonTree)adaptor.nil();
+                root_1 = (CommonTree)adaptor.becomeRoot(
+                (CommonTree)adaptor.create(PLUS, "+")
+                , root_1);
+
+                adaptor.addChild(root_1, stream_l.nextTree());
+
+                adaptor.addChild(root_1, stream_m.nextTree());
+
+                adaptor.addChild(root_1, stream_r.nextTree());
+
+                adaptor.addChild(root_0, root_1);
+                }
+
+            }
+
+
+            retval.tree = root_0;
+
+            }
+
             retval.tree = (CommonTree)adaptor.rulePostProcessing(root_0);
 
         }
@@ -358,20 +337,129 @@ public TreeAdaptor getTreeAdaptor() {
     }
     // $ANTLR end "rule"
 
+
+    public static class block_return extends TreeRuleReturnScope {
+        CommonTree tree;
+        public Object getTree() { return tree; }
+    };
+
+
+    // $ANTLR start "block"
+    // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolverTreeGrammar.g:36:1: block : ^( BLOCK ( ID )+ ) ;
+    public final PuzzleSolverTreeGrammar.block_return block() throws RecognitionException {
+        PuzzleSolverTreeGrammar.block_return retval = new PuzzleSolverTreeGrammar.block_return();
+        retval.start = input.LT(1);
+
+
+        CommonTree root_0 = null;
+
+        CommonTree _first_0 = null;
+        CommonTree _last = null;
+
+        CommonTree BLOCK8=null;
+        CommonTree ID9=null;
+
+        CommonTree BLOCK8_tree=null;
+        CommonTree ID9_tree=null;
+
+        try {
+            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolverTreeGrammar.g:36:7: ( ^( BLOCK ( ID )+ ) )
+            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolverTreeGrammar.g:36:9: ^( BLOCK ( ID )+ )
+            {
+            root_0 = (CommonTree)adaptor.nil();
+
+
+            _last = (CommonTree)input.LT(1);
+            {
+            CommonTree _save_last_1 = _last;
+            CommonTree _first_1 = null;
+            CommonTree root_1 = (CommonTree)adaptor.nil();
+            _last = (CommonTree)input.LT(1);
+            BLOCK8=(CommonTree)match(input,BLOCK,FOLLOW_BLOCK_in_block141); 
+            BLOCK8_tree = (CommonTree)adaptor.dupNode(BLOCK8);
+
+
+            root_1 = (CommonTree)adaptor.becomeRoot(BLOCK8_tree, root_1);
+
+
+            match(input, Token.DOWN, null); 
+            // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolverTreeGrammar.g:36:17: ( ID )+
+            int cnt1=0;
+            loop1:
+            do {
+                int alt1=2;
+                int LA1_0 = input.LA(1);
+
+                if ( (LA1_0==ID) ) {
+                    alt1=1;
+                }
+
+
+                switch (alt1) {
+            	case 1 :
+            	    // /Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/A3/PuzzleSolverTreeGrammar.g:36:17: ID
+            	    {
+            	    _last = (CommonTree)input.LT(1);
+            	    ID9=(CommonTree)match(input,ID,FOLLOW_ID_in_block143); 
+            	    ID9_tree = (CommonTree)adaptor.dupNode(ID9);
+
+
+            	    adaptor.addChild(root_1, ID9_tree);
+
+
+            	    }
+            	    break;
+
+            	default :
+            	    if ( cnt1 >= 1 ) break loop1;
+                        EarlyExitException eee =
+                            new EarlyExitException(1, input);
+                        throw eee;
+                }
+                cnt1++;
+            } while (true);
+
+
+            match(input, Token.UP, null); 
+            adaptor.addChild(root_0, root_1);
+            _last = _save_last_1;
+            }
+
+
+            }
+
+            retval.tree = (CommonTree)adaptor.rulePostProcessing(root_0);
+
+        }
+        catch (RecognitionException re) {
+            reportError(re);
+            recover(input,re);
+        }
+
+        finally {
+        	// do for sure before leaving
+        }
+        return retval;
+    }
+    // $ANTLR end "block"
+
     // Delegated rules
 
 
  
 
-    public static final BitSet FOLLOW_CONDS_in_walk41 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_rule_in_walk43 = new BitSet(new long[]{0x0000000000008808L});
-    public static final BitSet FOLLOW_PLUS_in_rule57 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_BLOCK_in_rule59 = new BitSet(new long[]{0x0000000000000010L});
-    public static final BitSet FOLLOW_BLOCK_in_rule61 = new BitSet(new long[]{0x0000000000000010L});
-    public static final BitSet FOLLOW_BLOCK_in_rule63 = new BitSet(new long[]{0x0000000000000008L});
-    public static final BitSet FOLLOW_MINUS_in_rule72 = new BitSet(new long[]{0x0000000000000004L});
-    public static final BitSet FOLLOW_BLOCK_in_rule76 = new BitSet(new long[]{0x0000000000000010L});
-    public static final BitSet FOLLOW_BLOCK_in_rule80 = new BitSet(new long[]{0x0000000000000010L});
-    public static final BitSet FOLLOW_BLOCK_in_rule84 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_CONDS_in_prog51 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_rule_in_prog53 = new BitSet(new long[]{0x0000000000002000L});
+    public static final BitSet FOLLOW_rule_in_prog55 = new BitSet(new long[]{0x0000000000002000L});
+    public static final BitSet FOLLOW_rule_in_prog57 = new BitSet(new long[]{0x0000000000002000L});
+    public static final BitSet FOLLOW_rule_in_prog59 = new BitSet(new long[]{0x0000000000002000L});
+    public static final BitSet FOLLOW_rule_in_prog61 = new BitSet(new long[]{0x0000000000002000L});
+    public static final BitSet FOLLOW_rule_in_prog63 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_OP_in_rule78 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_block_in_rule82 = new BitSet(new long[]{0x0000000000000010L});
+    public static final BitSet FOLLOW_block_in_rule86 = new BitSet(new long[]{0x0000000000000010L});
+    public static final BitSet FOLLOW_block_in_rule90 = new BitSet(new long[]{0x0000000000000008L});
+    public static final BitSet FOLLOW_BLOCK_in_block141 = new BitSet(new long[]{0x0000000000000004L});
+    public static final BitSet FOLLOW_ID_in_block143 = new BitSet(new long[]{0x0000000000000408L});
 
 }
