@@ -2,9 +2,7 @@ package antlrmain;
 
 import choco.Choco;
 import choco.Options;
-import choco.cp.solver.constraints.global.geost.geometricPrim.Obj;
 import choco.kernel.model.constraints.Constraint;
-import choco.kernel.model.variables.integer.IntegerExpressionVariable;
 import choco.kernel.model.variables.integer.IntegerVariable;
 import choco.kernel.solver.Solver;
 import org.antlr.runtime.tree.CommonTree;
@@ -43,10 +41,10 @@ public class DSLSolverA4 {
             System.out.println("Plus: " + plus.toStringTree());
 
             List<List<Character>> blocks_unnormalized = new ArrayList<>();
-            for (CommonTree block:blockTrees) {
+            for (CommonTree block : blockTrees) {
                 List<Character> chars = new ArrayList<>();
-                for(Object _char:block.getChildren()) {
-                    chars.add(((CommonTree)_char).getText().charAt(0));
+                for (Object _char : block.getChildren()) {
+                    chars.add(((CommonTree) _char).getText().charAt(0));
                 }
                 blocks_unnormalized.add(chars);
             }
@@ -58,12 +56,11 @@ public class DSLSolverA4 {
 
             // Declare every letter as a variable
             //IntegerVariable d = Choco.makeIntVar("d", 0, 9, Options.V_ENUM);
-            for (List<Character> chars:blocks) {
+            for (List<Character> chars : blocks) {
                 for (Character c : chars) {
-                    if(c.equals(DUMMY_CHAR)) {
+                    if (c.equals(DUMMY_CHAR)) {
                         intVars.put(c, Choco.makeIntVar(c.toString(), 0, 0, Options.V_ENUM));
-                    }
-                    else {
+                    } else {
                         intVars.put(c, Choco.makeIntVar(c.toString(), 0, 9, Options.V_ENUM));
                     }
                 }
@@ -78,11 +75,18 @@ public class DSLSolverA4 {
             IntegerVariable c5 = Choco.makeIntVar("c5", 0, 1, Options.V_ENUM);
             IntegerVariable c6 = Choco.makeIntVar("c6", 0, 0, Options.V_ENUM);
 
-            // wir haben einen carry constraint mehr als es buchstaben gibt
-            Map<Character, IntegerVariable> carries = new HashMap<>();
-            // for (int i = 0; i < ;i++)
-
-            // TODO: was passiert wenn die blöcke unterschiedlich lang sind?
+            // wir haben EINEN carry constraint mehr als es buchstaben gibt
+            Map<String, IntegerVariable> carries = new HashMap<>();
+            for (int i = 0; i - 1 < blocks.get(0).size(); i++) {
+                String carry = "c" + i;
+                if (i == 0 || i == blocks.get(0).size()) {
+                    carries.put(carry, Choco.makeIntVar(carry, 0, 0, Options.V_ENUM));
+                } else {
+                    carries.put(carry, Choco.makeIntVar(carry, 0, 1, Options.V_ENUM));
+                }
+            }
+            // das allererste und allerletzte Carry sind null.
+            System.out.println(carries.toString());
 /*
 
 
@@ -134,12 +138,12 @@ public class DSLSolverA4 {
         List<List<Character>> blocks_ret = new ArrayList<>();
 
         int maxLength = 0;
-        for (List<Character> chars:blocks) {
+        for (List<Character> chars : blocks) {
             maxLength = Math.max(maxLength, chars.size());
         }
 
         // prepend dummy Characters
-        for (List<Character> chars:blocks) {
+        for (List<Character> chars : blocks) {
             int missing = maxLength - chars.size();
             List<Character> fixedSize = new ArrayList<>(chars);
             Collections.reverse(fixedSize);
