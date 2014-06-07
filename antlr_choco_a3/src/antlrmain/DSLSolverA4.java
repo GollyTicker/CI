@@ -45,14 +45,12 @@ public class DSLSolverA4 {
 
             List<Constraint> blockWordsConstraints = mkWordConstraints(blocks,charsIntVars);
 
-/*
             // Constant of coefficients
-            int constant = 10;
+            int ten = 10;
 
-            model.addConstraint(Choco.gt(d, 0));
-            model.addConstraint(Choco.gt(g, 0));
-            model.addConstraint(Choco.gt(r, 0));
+            List<Constraint> firstCharGT0 = mkFstCharConstraints(blocks, charsIntVars);
 
+/*
             IntegerExpressionVariable one_1 = Choco.plus(Choco.plus(d, d), c0);
             IntegerExpressionVariable two_1 = Choco.plus(t, Choco.mult(c1, constant));
 
@@ -61,6 +59,27 @@ public class DSLSolverA4 {
         }
 
 
+        return null;
+    }
+
+    private static List<Constraint> mkFstCharConstraints(List<List<Character>> blocks,Map<Character, IntegerVariable> charsIntVars) {
+        List<Constraint> ls = new ArrayList<>();
+
+        for(List<Character> chars:blocks) {
+            ls.add(firstCharIsGT0(chars, charsIntVars));
+        }
+        System.out.println("GT 0 Constraints: " + ls);
+        return ls;
+    }
+
+    private static Constraint firstCharIsGT0(List<Character> chars, Map<Character, IntegerVariable> charsIntVars) {
+        for(Character c:chars) {
+            // der erste non-dummy character muss größer as 0 sein.
+            if(c.equals(DUMMY_CHAR)) continue;
+            // model.addConstraint(Choco.gt(d, 0));
+            return Choco.eq(charsIntVars.get(c), 0);
+        }
+        new RuntimeException("Charslist only contains DUMMYs: " + chars);
         return null;
     }
 
