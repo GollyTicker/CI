@@ -6,6 +6,7 @@ import choco.kernel.model.constraints.Constraint;
 import choco.kernel.model.variables.integer.IntegerExpressionVariable;
 import choco.kernel.model.variables.integer.IntegerVariable;
 import choco.kernel.solver.Solver;
+import com.sun.tools.javac.util.Pair;
 import org.antlr.runtime.tree.CommonTree;
 
 import java.util.*;
@@ -15,27 +16,13 @@ import java.util.*;
  */
 public class DSLSolverA4 {
 
-    public static Solver solveFromTree(CommonTree tree) {
-
-        List<Constraint> conds = toConstraints(tree);
-
-        return mkModel(conds);
-
-    }
-
     private static final Character DUMMY_CHAR = new Character('_');
 
-    private static Solver mkModel(List<Constraint> conds) {
-        // T O DD O
-        return null;
-    }
+    public static Solver solveFromTree(CommonTree tree) {
 
-    public static List<Constraint> toConstraints(CommonTree tree) {
-
-        List<Constraint> constraints = new ArrayList<>();
-
+        // Für jedes PlusConds, mache:
+        List<PlusCond> conds = new ArrayList<>();
         for (Object child : tree.getChildren()) {
-
             List<List<Character>> blocks = fromTree(child);
 
             Map<Character, IntegerVariable> charsIntVars = mkCharsIntVars(blocks);
@@ -45,20 +32,100 @@ public class DSLSolverA4 {
 
             List<Constraint> blockWordsConstraints = mkWordConstraints(blocks,charsIntVars);
 
-            // Constant of coefficients
-            int ten = 10;
 
             List<Constraint> firstCharGT0 = mkFstCharConstraints(blocks, charsIntVars);
+            conds.add(new PlusCond(blocks, charsIntVars, carries, blockWordsConstraints, firstCharGT0));
+        }
 
-/*
-            IntegerExpressionVariable one_1 = Choco.plus(Choco.plus(d, d), c0);
-            IntegerExpressionVariable two_1 = Choco.plus(t, Choco.mult(c1, constant));
+        // Constant of coefficients
+        final int ten = 10;
 
-            constraints.add(Choco.eq(one_1, two_1));
-            */
+        // for each plusCond. Calculate the Constraints for the Columns
+        for(int plusCondIdx = 0; plusCondIdx < conds.size(); plusCondIdx++) {
+            PlusCond plusCond = conds.get(plusCondIdx);
+            // for each column
+            List<Constraint> columnConstraints = new ArrayList<>();
+            for(int col = 0; col < plusCond.getWordLength(); col++) {
+                IntegerVariable letterA = plusCond.getCharVarAt(0,col);
+                IntegerVariable letterB = plusCond.getCharVarAt(1,col);
+                IntegerVariable resultLetter = plusCond.getCharVarAt(2,col);
+
+                IntegerVariable currentCarry = plusCond.getCarryAt(col);
+                IntegerVariable nextCarry = plusCond.getCarryAt(col + 1);
+
+
+                /*IntegerExpressionVariable one_4 = Choco.plus(Choco.plus(n, r), c3);
+                IntegerExpressionVariable two_4 = Choco.plus(b, Choco.mult(c4, constant));
+
+                model.addConstraint(Choco.eq(one_4, two_4));*/
+
+                IntegerExpressionVariable upperSide =
+                        Choco.plus(Choco.plus(letterA,letterB), currentCarry);
+
+                IntegerExpressionVariable bottomSide =
+                        Choco.plus(resultLetter, Choco.mult(nextCarry, ten));
+
+                columnConstraints.add(Choco.eq(upperSide, bottomSide));
+            }
+
+            plusCond.setColumnConstraints(columnConstraints);
+
+            // System.out.println("Column: " + columnConstraints);
+
         }
 
 
+        // TODO: sicherstellen, dass die charIntVars von den unterschiedlichen PlusCods
+        // einander gleich sind -> neue Constraints
+        List<Constraint> unifyingConstraints = unifyCharConstraints(conds);
+
+
+/*
+            // all different
+            model.addConstraint(Choco.allDifferent(d, o, n, a, l, g, e, r, b, t));
+
+            Solver s = new CPSolver();
+            s.read(model);
+            s.solveAll();
+            // Print name value
+
+           // System.out.println(s.pretty());
+            // Print name value
+            // System.out.println("get domain for donald" + s.getVar(donald).getDomain());
+    //        System.out.println("donald␣=␣" + s.getVar(donald).getVal());
+            */
+
+
+        return null;
+    }
+
+    private static List<Constraint> unifyCharConstraints(List<PlusCond> conds) {
+
+        List<Constraint> unifyingConstraints = new ArrayList<>();
+
+        // find all Characters
+        Set<Character> charSet = null;
+        // find intVars for each Character (charIntVars)
+        Map<Character,Set<IntegerVariable>> charIntVarsSet = null;
+
+        // unify all Constraints for each Character
+        for(Map.Entry<Character,Set<IntegerVariable>> entry:charIntVarsSet.entrySet()) {
+            Character c = entry.getKey();
+            Set<IntegerVariable> intVars = entry.getValue();
+            IntegerVariable fstVar = getFirst(intVars);
+            for(IntegerVariable intVar:intVars) {
+                unifyingConstraints.add(Choco.eq(fstVar, intVar));
+            }
+        }
+
+        return unifyingConstraints;
+    }
+
+    private static IntegerVariable getFirst(Set<IntegerVariable intVars) {
+        for(IntegerVariable intVar:intVars) {
+            return intVar;
+        }
+        throw new RuntimeException("Set<IntegerVariable> for a Char shouldnt be empty");
         return null;
     }
 
@@ -172,7 +239,7 @@ public class DSLSolverA4 {
             }
         }
 
-        // System.out.println(carries.toString());
+        System.out.println(carries.toString());
         return carries;
     }
 
