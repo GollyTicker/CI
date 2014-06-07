@@ -7,7 +7,7 @@ options {
 
 tokens {
 	BLOCK;
-	CONDS;
+	CONDS; 
 }
 
 // der AST wird hier auf der obersten Ebene bis ganz tief nach unten zusammengebaut
