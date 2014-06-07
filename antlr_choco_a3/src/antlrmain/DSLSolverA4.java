@@ -82,6 +82,8 @@ public class DSLSolverA4 {
                 charSet.addAll(chars);
             }
         }
+        charSet.remove(DUMMY_CHAR); // not strictly nessesary.
+        System.out.println("CharSet: " + charSet);
 
         // TODO: sicherstellen, dass die charIntVars von den unterschiedlichen PlusCods
         // einander gleich sind -> neue Constraints
@@ -133,6 +135,7 @@ public class DSLSolverA4 {
             for(PlusCond p:conds) {
                 addToSetIfOccurs(p, c, cIntVar);
             }
+            charIntVarsSet.put(c,cIntVar);
         }
 
         Constraint allDiff = allDifferentConstraints(charIntVarsSet);
