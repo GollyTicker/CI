@@ -9,6 +9,7 @@ import choco.kernel.solver.Solver;
 import com.sun.tools.javac.util.Pair;
 import org.antlr.runtime.tree.CommonTree;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -74,16 +75,21 @@ public class DSLSolverA4 {
 
         }
 
+        // find all Characters
+        Set<Character> charSet = new HashSet<>();
+        for(PlusCond p:conds) {
+            for(List<Character> chars:p.getBlocks()) {
+                charSet.addAll(chars);
+            }
+        }
 
         // TODO: sicherstellen, dass die charIntVars von den unterschiedlichen PlusCods
         // einander gleich sind -> neue Constraints
-        List<Constraint> unifyingConstraints = unifyCharConstraints(conds);
+        // all different
+        List<Constraint> unifyingConstraints = unifyAndAllDiffCharConstraints(conds, charSet);
 
 
-/*
-            // all different
-            model.addConstraint(Choco.allDifferent(d, o, n, a, l, g, e, r, b, t));
-
+        /*
             Solver s = new CPSolver();
             s.read(model);
             s.solveAll();
@@ -99,14 +105,39 @@ public class DSLSolverA4 {
         return null;
     }
 
-    private static List<Constraint> unifyCharConstraints(List<PlusCond> conds) {
+    public static void method(String... strs) {
+        for (String s : strs)
+            System.out.println(s);
+    }
+
+    private static Constraint allDifferentConstraints(Map<Character,Set<IntegerVariable>> charIntVarsSet) {
+        Set<IntegerVariable> cIntVars = new HashSet<>();
+        for(Character c:charIntVarsSet.keySet()) {
+            cIntVars.add(getFirst(charIntVarsSet.get(c)));
+        }
+
+        //model.addConstraint(Choco.allDifferent(d, o, n, a, l, g, e, r, b, t));
+
+        // https://stackoverflow.com/questions/9863742/trying-to-pass-an-arraylist-to-a-varargs-method
+        return Choco.allDifferent(cIntVars.toArray(new IntegerVariable[cIntVars.size()]));
+    }
+
+    private static List<Constraint> unifyAndAllDiffCharConstraints(List<PlusCond> conds, Set<Character> charSet) {
 
         List<Constraint> unifyingConstraints = new ArrayList<>();
 
-        // find all Characters
-        Set<Character> charSet = null;
         // find intVars for each Character (charIntVars)
-        Map<Character,Set<IntegerVariable>> charIntVarsSet = null;
+        Map<Character,Set<IntegerVariable>> charIntVarsSet = new HashMap<>();
+        for(Character c:charSet) {
+            Set<IntegerVariable> cIntVar = new HashSet<>();
+            for(PlusCond p:conds) {
+                addToSetIfOccurs(p, c, cIntVar);
+            }
+        }
+
+        Constraint allDiff = allDifferentConstraints(charIntVarsSet);
+
+        System.out.println("AllDiff: " + allDiff);
 
         // unify all Constraints for each Character
         for(Map.Entry<Character,Set<IntegerVariable>> entry:charIntVarsSet.entrySet()) {
@@ -118,15 +149,27 @@ public class DSLSolverA4 {
             }
         }
 
+        System.out.println("Unifying: " + unifyingConstraints);
+
+        unifyingConstraints.add(allDiff);
+
         return unifyingConstraints;
     }
 
-    private static IntegerVariable getFirst(Set<IntegerVariable intVars) {
+    private static void addToSetIfOccurs(PlusCond p, Character c, Set<IntegerVariable> cIntVar) {
+        for(Map.Entry<Character, IntegerVariable> entry:p.getCharIntVars().entrySet()) {
+            Character currC = entry.getKey();
+            if(currC.equals(c)) {
+                cIntVar.add(entry.getValue());
+            }
+        }
+    }
+
+    private static IntegerVariable getFirst(Set<IntegerVariable> intVars) {
         for(IntegerVariable intVar:intVars) {
             return intVar;
         }
         throw new RuntimeException("Set<IntegerVariable> for a Char shouldnt be empty");
-        return null;
     }
 
     private static List<Constraint> mkFstCharConstraints(List<List<Character>> blocks,Map<Character, IntegerVariable> charsIntVars) {
@@ -135,7 +178,7 @@ public class DSLSolverA4 {
         for(List<Character> chars:blocks) {
             ls.add(firstCharIsGT0(chars, charsIntVars));
         }
-        System.out.println("GT 0 Constraints: " + ls);
+        // System.out.println("GT 0 Constraints: " + ls);
         return ls;
     }
 
@@ -238,8 +281,7 @@ public class DSLSolverA4 {
                 carries.put(carry, Choco.makeIntVar(carry, 0, 1, Options.V_ENUM));
             }
         }
-
-        System.out.println(carries.toString());
+        // System.out.println(carries.toString());
         return carries;
     }
 
