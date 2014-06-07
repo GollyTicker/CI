@@ -2,6 +2,9 @@ package antlrmain;
 
 import choco.Choco;
 import choco.Options;
+import choco.cp.model.CPModel;
+import choco.cp.solver.CPSolver;
+import choco.kernel.model.Model;
 import choco.kernel.model.constraints.Constraint;
 import choco.kernel.model.variables.integer.IntegerExpressionVariable;
 import choco.kernel.model.variables.integer.IntegerVariable;
@@ -85,26 +88,27 @@ public class DSLSolverA4 {
         charSet.remove(DUMMY_CHAR); // not strictly nessesary.
         System.out.println("CharSet: " + charSet);
 
-        // TODO: sicherstellen, dass die charIntVars von den unterschiedlichen PlusCods
+        // sicherstellen, dass die charIntVars von den unterschiedlichen PlusCods
         // einander gleich sind -> neue Constraints
-        // all different
-        List<Constraint> unifyingConstraints = unifyAndAllDiffCharConstraints(conds, charSet);
+        List<Constraint> unifyingAndallDiffConstraints = unifyAndAllDiffCharConstraints(conds, charSet);
+        // außerdem wird hier auch noch "all different" ausgeführt
 
+        // add all accumulated Constraints
+        Model model = new CPModel();
+        for(PlusCond p:conds) {
+            for(Constraint c:p.bulkConstraints()) {
+                model.addConstraint(c);
+            }
+        }
+        for(Constraint c:unifyingAndallDiffConstraints) {
+            model.addConstraint(c);
+        }
 
-        /*
-            Solver s = new CPSolver();
-            s.read(model);
-            s.solveAll();
-            // Print name value
+        Solver s = new CPSolver();
+        s.read(model);
+        s.solveAll();
 
-           // System.out.println(s.pretty());
-            // Print name value
-            // System.out.println("get domain for donald" + s.getVar(donald).getDomain());
-    //        System.out.println("donald␣=␣" + s.getVar(donald).getVal());
-            */
-
-
-        return null;
+        return s;
     }
 
     public static void method(String... strs) {

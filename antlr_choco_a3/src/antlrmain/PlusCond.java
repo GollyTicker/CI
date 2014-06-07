@@ -3,8 +3,10 @@ package antlrmain;
 import choco.kernel.model.constraints.Constraint;
 import choco.kernel.model.variables.integer.IntegerVariable;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by kbrusch on 6/7/14.
@@ -66,5 +68,13 @@ public class PlusCond {
 
     public void setColumnConstraints(List<Constraint> columnConstraints) {
         this.columnConstraints = columnConstraints;
+    }
+
+    public Set<Constraint> bulkConstraints() {
+        Set<Constraint> cs = new HashSet<>();
+        cs.addAll(getBlockWordConstraints());
+        cs.addAll(getFirstCharGT0());
+        cs.addAll(getColumnConstraints());
+        return cs;
     }
 }

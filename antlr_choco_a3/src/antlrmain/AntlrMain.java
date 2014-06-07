@@ -2,6 +2,7 @@ package antlrmain; /**
  * Created by kbrusch on 5/17/14.
  */
 
+import choco.kernel.solver.Solver;
 import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.tree.CommonTree;
@@ -45,7 +46,12 @@ public class AntlrMain {
         CommonTree normalized = (CommonTree)progger.prog().getTree();
         System.out.println("Normalized AST: " + normalized.toStringTree());
 
-        solveFromTree(normalized);
+        Solver s = solveFromTree(normalized);
+
+
+
+        System.out.println(s.pretty());
+        // Print name value.... todo.
 
     }
 }
