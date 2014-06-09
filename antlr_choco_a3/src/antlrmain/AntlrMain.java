@@ -46,6 +46,7 @@ public class AntlrMain {
         CommonTree normalized = (CommonTree)progger.prog().getTree();
         System.out.println("Normalized AST: " + normalized.toStringTree());
 
+        // Praktikum 4
         solveFromTree(normalized);
 
     }

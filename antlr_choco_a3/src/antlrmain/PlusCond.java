@@ -26,10 +26,6 @@ public class PlusCond {
         this.firstCharGT0 = firstCharGT0;
     }
 
-    public Map<Character, IntegerVariable> getGlobalCharIntVars() {
-        return globalCharIntVars;
-    }
-
     public List<Constraint> getFirstCharGT0() {
         return firstCharGT0;
     }

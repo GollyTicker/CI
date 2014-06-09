@@ -32,7 +32,6 @@ public class DSLSolverA4 {
 
         Map<Character, IntegerVariable> globalCharIntVars = fromCharSet(charSetDummy);
 
-
         // Für jedes PlusConds, mache:
         List<PlusCond> conds = new ArrayList<>();
         for (Object child : tree.getChildren()) {
@@ -48,15 +47,12 @@ public class DSLSolverA4 {
             conds.add(new PlusCond(blocks, globalCharIntVars, carries, firstCharGT0));
         }
 
-        // Constant of coefficients
-        final int ten = 10;
-
         // for each plusCond. Calculate the Constraints for the Columns
-        for(int plusCondIdx = 0; plusCondIdx < conds.size(); plusCondIdx++) {
-            PlusCond plusCond = conds.get(plusCondIdx);
-            // for each column
+        for(PlusCond plusCond:conds) {
 
             List<Constraint> columnConstraints = new ArrayList<>();
+
+            // for each column
             for(int col = 0; col < plusCond.getWordLength(); col++) {
                 IntegerVariable letterA = plusCond.getCharVarAt(0,col);
                 IntegerVariable letterB = plusCond.getCharVarAt(1,col);
@@ -74,7 +70,7 @@ public class DSLSolverA4 {
                         Choco.plus(Choco.plus(letterA,letterB), currentCarry);
 
                 IntegerExpressionVariable bottomSide =
-                        Choco.plus(resultLetter, Choco.mult(nextCarry, ten));
+                        Choco.plus(resultLetter, Choco.mult(nextCarry, 10));
 
                 columnConstraints.add(Choco.eq(upperSide, bottomSide));
             }
@@ -124,7 +120,7 @@ public class DSLSolverA4 {
         // print Solutions in ascending order
         for(Integer i:ints) {
             Character c = reverseMappings.get(i);
-            System.out.println(c  + "=>" + i);
+            System.out.println(c  + " => " + i);
         }
     }
 

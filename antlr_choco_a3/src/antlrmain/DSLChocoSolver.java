@@ -38,7 +38,6 @@ public class DSLChocoSolver {
         IntegerVariable g = Choco.makeIntVar("g", 0, 9, Options.V_ENUM);
         IntegerVariable e = Choco.makeIntVar("e", 0, 9, Options.V_ENUM);
         IntegerVariable r = Choco.makeIntVar("r", 0, 9, Options.V_ENUM);
-
         IntegerVariable b = Choco.makeIntVar("b", 0, 9, Options.V_ENUM);
         IntegerVariable t = Choco.makeIntVar("t", 0, 9, Options.V_ENUM);
 
