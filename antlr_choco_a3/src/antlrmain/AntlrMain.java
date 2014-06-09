@@ -17,7 +17,7 @@ public class AntlrMain {
     public static void main(String[] args) throws Exception {
 
 
-        InputStream is = new FileInputStream("/Users/kbrusch/Google Drive/project/constraints/src/antlrmain/PuzzleSolverExample.txt");
+        InputStream is = new FileInputStream("/Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/antlr_choco_a3/src/antlrmain/PuzzleSolverExample.txt");
 
         System.out.println("stream build");
         //ANTLR parse text files line for line
