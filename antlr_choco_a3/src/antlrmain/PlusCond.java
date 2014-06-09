@@ -13,35 +13,21 @@ import java.util.Set;
  */
 public class PlusCond {
     private List<List<Character>> blocks;
-    private Map<Character, IntegerVariable> charIntVars;
+    private Map<Character, IntegerVariable> globalCharIntVars;
     private Map<String, IntegerVariable> carries;
-    private List<Constraint> blockWordConstraints;
     private List<Constraint> firstCharGT0;
     private List<Constraint> columnConstraints;
 
 
-    public PlusCond(List<List<Character>> blocks, Map<Character, IntegerVariable> charsIntVars, Map<String, IntegerVariable> carries, List<Constraint> blockWordsConstraints, List<Constraint> firstCharGT0) {
+    public PlusCond(List<List<Character>> blocks, Map<Character, IntegerVariable> charsIntVars, Map<String, IntegerVariable> carries, List<Constraint> firstCharGT0) {
         this.blocks = blocks;
-        this.charIntVars = charsIntVars;
+        this.globalCharIntVars = charsIntVars;
         this.carries = carries;
-        this.blockWordConstraints = blockWordsConstraints;
         this.firstCharGT0 = firstCharGT0;
     }
 
-    public List<List<Character>> getBlocks() {
-        return blocks;
-    }
-
-    public Map<Character, IntegerVariable> getCharIntVars() {
-        return charIntVars;
-    }
-
-    public Map<String, IntegerVariable> getCarries() {
-        return carries;
-    }
-
-    public List<Constraint> getBlockWordConstraints() {
-        return blockWordConstraints;
+    public Map<Character, IntegerVariable> getGlobalCharIntVars() {
+        return globalCharIntVars;
     }
 
     public List<Constraint> getFirstCharGT0() {
@@ -55,7 +41,7 @@ public class PlusCond {
     public IntegerVariable getCharVarAt(int i, int col) {
         // bei col = 0 soll der Buchstabe ganz links zurückkommen.
         Character c = blocks.get(i).get(getWordLength() - 1 - col);
-        return charIntVars.get(c);
+        return globalCharIntVars.get(c);
     }
 
     public IntegerVariable getCarryAt(int col) {
@@ -70,9 +56,8 @@ public class PlusCond {
         this.columnConstraints = columnConstraints;
     }
 
-    public Set<Constraint> bulkConstraints() {
+    public Set<Constraint> getAllConstraints() {
         Set<Constraint> cs = new HashSet<>();
-        cs.addAll(getBlockWordConstraints());
         cs.addAll(getFirstCharGT0());
         cs.addAll(getColumnConstraints());
         return cs;

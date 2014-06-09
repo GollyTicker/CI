@@ -9,10 +9,8 @@ import choco.kernel.model.constraints.Constraint;
 import choco.kernel.model.variables.integer.IntegerExpressionVariable;
 import choco.kernel.model.variables.integer.IntegerVariable;
 import choco.kernel.solver.Solver;
-import com.sun.tools.javac.util.Pair;
 import org.antlr.runtime.tree.CommonTree;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -22,23 +20,32 @@ public class DSLSolverA4 {
 
     private static final Character DUMMY_CHAR = new Character('_');
 
-    public static Solver solveFromTree(CommonTree tree) {
+    public static void solveFromTree(CommonTree tree) {
+
+        // get the List of Chars in the puzzle
+        Set<Character> charSet = findAllChars(tree);
+        assert charSet.size() <= 10;
+
+        // set of chars with the Dummy Char
+        Set<Character> charSetDummy = new HashSet<>(charSet);
+        charSetDummy.add(DUMMY_CHAR);
+
+        Map<Character, IntegerVariable> globalCharIntVars = fromCharSet(charSetDummy);
+
 
         // Für jedes PlusConds, mache:
         List<PlusCond> conds = new ArrayList<>();
         for (Object child : tree.getChildren()) {
             List<List<Character>> blocks = fromTree(child);
 
-            Map<Character, IntegerVariable> charsIntVars = mkCharsIntVars(blocks);
-
             // declare carry constraints
             Map<String, IntegerVariable> carries = mkCarriesIntVars(blocks);
 
-            List<Constraint> blockWordsConstraints = mkWordConstraints(blocks,charsIntVars);
+            // first character in block should be greater than zero
+            List<Constraint> firstCharGT0 = mkFstCharConstraints(blocks, globalCharIntVars);
 
-
-            List<Constraint> firstCharGT0 = mkFstCharConstraints(blocks, charsIntVars);
-            conds.add(new PlusCond(blocks, charsIntVars, carries, blockWordsConstraints, firstCharGT0));
+            // store the constraints
+            conds.add(new PlusCond(blocks, globalCharIntVars, carries, firstCharGT0));
         }
 
         // Constant of coefficients
@@ -48,6 +55,7 @@ public class DSLSolverA4 {
         for(int plusCondIdx = 0; plusCondIdx < conds.size(); plusCondIdx++) {
             PlusCond plusCond = conds.get(plusCondIdx);
             // for each column
+
             List<Constraint> columnConstraints = new ArrayList<>();
             for(int col = 0; col < plusCond.getWordLength(); col++) {
                 IntegerVariable letterA = plusCond.getCharVarAt(0,col);
@@ -56,7 +64,6 @@ public class DSLSolverA4 {
 
                 IntegerVariable currentCarry = plusCond.getCarryAt(col);
                 IntegerVariable nextCarry = plusCond.getCarryAt(col + 1);
-
 
                 /*IntegerExpressionVariable one_4 = Choco.plus(Choco.plus(n, r), c3);
                 IntegerExpressionVariable two_4 = Choco.plus(b, Choco.mult(c4, constant));
@@ -78,107 +85,92 @@ public class DSLSolverA4 {
 
         }
 
-        // find all Characters
-        Set<Character> charSet = new HashSet<>();
-        for(PlusCond p:conds) {
-            for(List<Character> chars:p.getBlocks()) {
-                charSet.addAll(chars);
-            }
-        }
-        charSet.remove(DUMMY_CHAR); // not strictly nessesary.
-        System.out.println("CharSet: " + charSet);
+        System.out.println("CharSet (without Dummy): " + charSet);
+        // System.out.println("CharSet w/Dummy: " + charSetDummy);
 
-        // sicherstellen, dass die charIntVars von den unterschiedlichen PlusCods
-        // einander gleich sind -> neue Constraints
-        List<Constraint> unifyingAndallDiffConstraints = unifyAndAllDiffCharConstraints(conds, charSet);
+
         // außerdem wird hier auch noch "all different" ausgeführt
+        Constraint allDiff = allDifferentConstraints(charSet, globalCharIntVars);
+        // dont include dummy char in allDifferent constraint
+
 
         // add all accumulated Constraints
         Model model = new CPModel();
         for(PlusCond p:conds) {
-            for(Constraint c:p.bulkConstraints()) {
+            for(Constraint c:p.getAllConstraints()) {
                 model.addConstraint(c);
             }
         }
-        for(Constraint c:unifyingAndallDiffConstraints) {
-            model.addConstraint(c);
-        }
+        model.addConstraint(allDiff);
 
+
+        // Solve
         Solver s = new CPSolver();
         s.read(model);
         s.solveAll();
 
-        return s;
-    }
-
-    public static void method(String... strs) {
-        for (String s : strs)
-            System.out.println(s);
-    }
-
-    private static Constraint allDifferentConstraints(Map<Character,Set<IntegerVariable>> charIntVarsSet) {
-        Set<IntegerVariable> cIntVars = new HashSet<>();
-        for(Character c:charIntVarsSet.keySet()) {
-            cIntVars.add(getFirst(charIntVarsSet.get(c)));
+        // prepare Solutions
+        Map<Character, Integer> mappings = new HashMap<>();
+        Map<Integer, Character> reverseMappings = new HashMap<>();
+        List<Integer> ints = new ArrayList<>();
+        for(Character c:charSet) {
+            Integer i = s.getVar(globalCharIntVars.get(c)).getVal();
+            mappings.put(c, i);
+            reverseMappings.put(i, c);
+            ints.add(i);
         }
+        Collections.sort(ints);
 
+        // print Solutions in ascending order
+        for(Integer i:ints) {
+            Character c = reverseMappings.get(i);
+            System.out.println(c  + "=>" + i);
+        }
+    }
+
+    // creates InteverVariables for the given Characters. The dummy char has to be zero.
+    private static Map<Character, IntegerVariable> fromCharSet(Set<Character> charSetDummy) {
+        Map<Character, IntegerVariable> vars = new HashMap<>();
+        for(Character c:charSetDummy) {
+            if (c.equals(DUMMY_CHAR)) {
+                vars.put(c, Choco.makeIntVar(c.toString(), 0, 0, Options.V_ENUM));
+            } else {
+                vars.put(c, Choco.makeIntVar(c.toString(), 0, 9, Options.V_ENUM));
+            }
+        }
+        return vars;
+    }
+
+    // returns all the true characters occuring in the puzzle
+    private static Set<Character> findAllChars(CommonTree tree) {
+        Set<Character> charSet = new HashSet<>();
+        for (Object child : tree.getChildren()) {
+            List<List<Character>> blocks = fromTree(child);
+            for(List<Character> chars:blocks) {
+                for(Character c:chars) {
+                    if(!c.equals(DUMMY_CHAR))   // dont add the dummy char
+                        charSet.add(c);
+                }
+            }
+        }
+        return charSet;
+    }
+    // creates the all different constraint, if given the charSet of the Puzzle and its IntegerVariables
+    private static Constraint allDifferentConstraints(Set<Character> charSet, Map<Character,IntegerVariable> charIntVars) {
+        Set<IntegerVariable> intVars = new HashSet<>();
+        for (Character c:charSet) {
+            intVars.add(charIntVars.get(c));
+        }
         //model.addConstraint(Choco.allDifferent(d, o, n, a, l, g, e, r, b, t));
 
         // https://stackoverflow.com/questions/9863742/trying-to-pass-an-arraylist-to-a-varargs-method
-        return Choco.allDifferent(cIntVars.toArray(new IntegerVariable[cIntVars.size()]));
+        Constraint allDiff = Choco.allDifferent(intVars.toArray(new IntegerVariable[intVars.size()]));
+
+        // System.out.println("AllDiff: " + allDiff);
+        return allDiff;
     }
 
-    private static List<Constraint> unifyAndAllDiffCharConstraints(List<PlusCond> conds, Set<Character> charSet) {
-
-        List<Constraint> unifyingConstraints = new ArrayList<>();
-
-        // find intVars for each Character (charIntVars)
-        Map<Character,Set<IntegerVariable>> charIntVarsSet = new HashMap<>();
-        for(Character c:charSet) {
-            Set<IntegerVariable> cIntVar = new HashSet<>();
-            for(PlusCond p:conds) {
-                addToSetIfOccurs(p, c, cIntVar);
-            }
-            charIntVarsSet.put(c,cIntVar);
-        }
-
-        Constraint allDiff = allDifferentConstraints(charIntVarsSet);
-
-        System.out.println("AllDiff: " + allDiff);
-
-        // unify all Constraints for each Character
-        for(Map.Entry<Character,Set<IntegerVariable>> entry:charIntVarsSet.entrySet()) {
-            Character c = entry.getKey();
-            Set<IntegerVariable> intVars = entry.getValue();
-            IntegerVariable fstVar = getFirst(intVars);
-            for(IntegerVariable intVar:intVars) {
-                unifyingConstraints.add(Choco.eq(fstVar, intVar));
-            }
-        }
-
-        System.out.println("Unifying: " + unifyingConstraints);
-
-        unifyingConstraints.add(allDiff);
-
-        return unifyingConstraints;
-    }
-
-    private static void addToSetIfOccurs(PlusCond p, Character c, Set<IntegerVariable> cIntVar) {
-        for(Map.Entry<Character, IntegerVariable> entry:p.getCharIntVars().entrySet()) {
-            Character currC = entry.getKey();
-            if(currC.equals(c)) {
-                cIntVar.add(entry.getValue());
-            }
-        }
-    }
-
-    private static IntegerVariable getFirst(Set<IntegerVariable> intVars) {
-        for(IntegerVariable intVar:intVars) {
-            return intVar;
-        }
-        throw new RuntimeException("Set<IntegerVariable> for a Char shouldnt be empty");
-    }
-
+    // creates the Constraints, that the first character in each block/word must not be zero.
     private static List<Constraint> mkFstCharConstraints(List<List<Character>> blocks,Map<Character, IntegerVariable> charsIntVars) {
         List<Constraint> ls = new ArrayList<>();
 
@@ -189,54 +181,20 @@ public class DSLSolverA4 {
         return ls;
     }
 
+    // creates the constraint for a given block
     private static Constraint firstCharIsGT0(List<Character> chars, Map<Character, IntegerVariable> charsIntVars) {
         for(Character c:chars) {
             // der erste non-dummy character muss größer as 0 sein.
             if(c.equals(DUMMY_CHAR)) continue;
             // model.addConstraint(Choco.gt(d, 0));
-            return Choco.eq(charsIntVars.get(c), 0);
+            return Choco.gt(charsIntVars.get(c), 0);
         }
         new RuntimeException("Charslist only contains DUMMYs: " + chars);
         return null;
     }
 
-    private static List<Constraint> mkWordConstraints(List<List<Character>> blocks, Map<Character, IntegerVariable> charsIntVars) {
-        // Wörter zusammenfassen zum einfacheren Anzeigen
-        List<Constraint> blockWordsConstraints = new ArrayList<>();
-        for (List<Character> chars:blocks) {
-
-            // IntegerVariable gerald = Choco.makeIntVar("gerald", 0, 1000000, Options.V_BOUND);
-            int upperBound = (int)Math.round(Math.pow(10,chars.size()));
-            IntegerVariable blockWord = Choco.makeIntVar(prettyString(chars), 0, upperBound, Options.V_BOUND);
-
-            // int[] c = new int[]{100000, 10000, 1000, 100, 10, 1};
-            int[] constants = new int[chars.size()];
-            for(int i = 0; i < constants.length ;i++) {
-                // absteigende zehnerpotenzen bis runter zu 1
-                constants[i] = (int)Math.round(Math.pow(10,constants.length - 1 - i));
-            }
-
-            IntegerVariable[] intVarArr = new IntegerVariable[chars.size()];
-            int i = 0;
-            for(Character c:chars) {
-                intVarArr[i] = charsIntVars.get(c);
-                i++;
-            }
-
-            // Declare every combination of letter as an integer expression
-            // IntegerExpressionVariable donaldLetters = Choco.scalar(new IntegerVariable[]{d, o, n, a,
-            //        l, d}, c);
-            IntegerExpressionVariable wordLetters = Choco.scalar( intVarArr, constants);
-
-            // Add equality between name and letters combination
-            // model.addConstraint(Choco.eq(donaldLetters, donald));
-            blockWordsConstraints.add(Choco.eq(wordLetters, blockWord));
-        }
-
-        // System.out.println("Words: " + blockWordsConstraints);
-        return blockWordsConstraints;
-    }
-
+    // builds the blocks if given the PlusCond from ANTLR AST. It also normalizses the lengths,
+    // so that every block has the same length. It prepends dummy characters, if the length is too small.
     private static List<List<Character>> fromTree(Object child) {
         CommonTree plus = (CommonTree) child;
         List<CommonTree> blockTrees = (List<CommonTree>) plus.getChildren();
@@ -253,30 +211,13 @@ public class DSLSolverA4 {
         }
         List<List<Character>> blocks = normalizeLengths(blocks_unnormalized);
 
-        System.out.println(blocks);
+        // System.out.println("Blocks: " + blocks);
 
         return blocks;
     }
 
-    private static Map<Character, IntegerVariable> mkCharsIntVars(List<List<Character>> blocks) {
-        Map<Character, IntegerVariable> charsIntVars = new HashMap<>();
-
-        // Declare every letter as a variable
-        //IntegerVariable d = Choco.makeIntVar("d", 0, 9, Options.V_ENUM);
-        for (List<Character> chars : blocks) {
-            for (Character c : chars) {
-                if (c.equals(DUMMY_CHAR)) {
-                    charsIntVars.put(c, Choco.makeIntVar(c.toString(), 0, 0, Options.V_ENUM));
-                } else {
-                    charsIntVars.put(c, Choco.makeIntVar(c.toString(), 0, 9, Options.V_ENUM));
-                }
-            }
-        }
-        return charsIntVars;
-    }
-
+    // gegeben den Blöcken, werden daraus die IntVars für die Carries erzeugt.
     private static Map<String, IntegerVariable> mkCarriesIntVars(List<List<Character>> blocks) {
-        // IntegerVariable c0 = Choco.makeIntVar("c0", 0, 0, Options.V_ENUM);
         // wir haben EINEN carry constraint mehr als es buchstaben gibt
         Map<String, IntegerVariable> carries = new HashMap<>();
         for (int i = 0; i - 1 < blocks.get(0).size(); i++) {
@@ -285,19 +226,12 @@ public class DSLSolverA4 {
             if (i == 0 || i == blocks.get(0).size()) {
                 carries.put(carry, Choco.makeIntVar(carry, 0, 0, Options.V_ENUM));
             } else {
+                // IntegerVariable c0 = Choco.makeIntVar("c0", 0, 0, Options.V_ENUM);
                 carries.put(carry, Choco.makeIntVar(carry, 0, 1, Options.V_ENUM));
             }
         }
-        // System.out.println(carries.toString());
+        // System.out.println("Carries: " + carries.toString());
         return carries;
-    }
-
-    private static String prettyString(List<Character> chars) {
-        StringBuilder sb = new StringBuilder();
-        for(Character c:chars) {
-            sb.append(c.toString());
-        }
-        return String.valueOf(sb);
     }
 
     private static List<List<Character>> normalizeLengths(List<List<Character>> blocks) {

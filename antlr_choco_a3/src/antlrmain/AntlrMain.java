@@ -19,39 +19,34 @@ public class AntlrMain {
 
         InputStream is = new FileInputStream("/Users/kbrusch/Google Drive/class/SS_2014/CI/swaneet/CI/antlr_choco_a3/src/antlrmain/PuzzleSolverExample.txt");
 
-        System.out.println("stream build");
+        System.out.print("Stream built...");
         //ANTLR parse text files line for line
         ANTLRInputStream input = new ANTLRInputStream(is);
-        System.out.println("input");
+        System.out.print("Input...");
         //which lexer use to extract tokens (our own lexer)
         PuzzleSolverLexer lexer = new PuzzleSolverLexer(input);
-        System.out.println("lexer");
+        System.out.print("Lexer...");
         //get the tokens from lexer
         CommonTokenStream tokens = new CommonTokenStream(lexer);
-        System.out.println("tokens");
+        System.out.print("Tokens...");
         //erzeuge den parse baum aus den Tokens
         PuzzleSolverParser parser = new PuzzleSolverParser(tokens);
-        System.out.println("parser");
+        System.out.print("Parser...");
         //wir callen unsere prog methode in unseren parser
         //wir erhalten unseren parse baum
         PuzzleSolverParser.prog_return r = parser.prog();
-        System.out.println("prog_return");
+        System.out.println("Prog_return.");
         //verarbeiten den parse baum zum AST
         CommonTree t = (CommonTree) r.getTree();
 
-        System.out.println("generatued old AST: " + t.toStringTree());
+        System.out.println("Old AST: " + t.toStringTree());
         CommonTreeNodeStream nodes = new CommonTreeNodeStream(t);
-        System.out.println("generatued node stream");
+        System.out.println("Generatued node stream...");
         PuzzleSolverTreeGrammar progger = new PuzzleSolverTreeGrammar(nodes);
         CommonTree normalized = (CommonTree)progger.prog().getTree();
         System.out.println("Normalized AST: " + normalized.toStringTree());
 
-        Solver s = solveFromTree(normalized);
-
-
-
-        System.out.println(s.pretty());
-        // Print name value.... todo.
+        solveFromTree(normalized);
 
     }
 }
