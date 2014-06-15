@@ -7,6 +7,8 @@ object Rek {
 	val a = 'a'
 	val b = 'b'
 	
+	// NOT WORKING!!!!
+	
 	def apply(word2:String):Boolean = {
 		word = word2
 		val ret = S && word == ""
