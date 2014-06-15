@@ -41,30 +41,29 @@ object Rek {
 	
 	def test():Boolean = {
 		val ys = List( "[]", "[a]", "[[a,[a,a]],a]", "[[[]],a]" )
-		val ns = List( "[", "a]", "[a,[a,a]],a,]", "[[]],a]", "[[[]a],a]" )
+		val ns = List( "[", "a]", "[a,[a,a]],a]", "[a,[a,a],a,]", "[[]],a]", "[[[]a],a]" )
 		val fst = ys forall { x => Rek(x) }
 		val snd = ns forall { x => ! Rek(x) }
 		fst && snd
 	}
 	
+	// LIST 	-> '[' ELEMS ']'
 	def LIST:Boolean = () match {
-		case _ if match_('[') => ELEMS && match_(']')
-		case _ => false
+		case _ => match_('[') && ELEMS && match_(']')
 	}
 	
+	// ELEMS 	-> (ELEM (',' ELEM)*)?
 	def ELEMS:Boolean = () match {
-		case _ => {
-					ELEM && {
-							var ret = true;
-							while ( match_(',') ) {
-								ret = ELEM
+		case _ if ELEM => {	// parse a single element then the other elements
+							while ( match_(',')) {
+								if (!ELEM) return false
 							}
-							ret
+							true
 						  }
-					true
-				  }
+		case _ => true		// or parse no elements
 	}
 	
+	// ELEM 	-> 'a' | LIST
 	def ELEM:Boolean = () match {
 		case _ => match_('a') || LIST
 	}
