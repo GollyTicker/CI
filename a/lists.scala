@@ -7,8 +7,11 @@ object Rek {
 	// scala> Rek("[a,[a],a,[[],a]]")
 	// res0: Boolean = true
 	
+	// scala> Rek("[a,[a],,a,[[],a]]")
+	// res1: Boolean = false
+	
 	// scala> Rek.test
-	// res1: Boolean = true
+	// res2: Boolean = true
 	
 	var word = ""
 	var verbose = false
@@ -56,7 +59,7 @@ object Rek {
 	def ELEMS:Boolean = () match {
 		case _ if ELEM => {	// parse a single element then the other elements
 							while ( match_(',')) {
-								if (!ELEM) return false
+								if (!ELEM) return pfalse("ELEM failed")
 							}
 							true
 						  }
@@ -68,14 +71,16 @@ object Rek {
 		case _ => match_('a') || LIST
 	}
 	
+	def pfalse(s:String):Boolean = { if (verbose) println(s); false }
+	
 	def match_(c:Char):Boolean = () match {
-		case _ if word == "" => false
+		case _ if word == "" => pfalse("Expected "+c+" but got EOF")
 		case _ if c == word.head => {
 						word = word.tail
-						if (verbose) println(word)
+						if (verbose) println("Scan: " + word)
 						true
 					}
-		case _ => false
+		case _ => pfalse("Expected "+c+" but got "+word.head)
 	}
 	
 }
